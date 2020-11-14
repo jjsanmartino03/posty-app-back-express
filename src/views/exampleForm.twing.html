@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="/examples" method="post">
+        <input  name="name" placeholder="Escribi el nombre del ejemplo" />
+        <select name="category" >
+            {% for item in categories %}
+            <option value="{{item.id}}">{{ item.name }}</option>
+            {% endfor %}
+        </select>
+    </form>
+</body>
+</html>
