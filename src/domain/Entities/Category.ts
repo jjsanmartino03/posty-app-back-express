@@ -1,4 +1,12 @@
-import {BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import {
+    BaseEntity,
+    Column,
+    CreateDateColumn,
+    DeleteDateColumn,
+    Entity, ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn
+} from 'typeorm';
 
 // TODO: add relationships
 @Entity()
@@ -8,6 +16,12 @@ export class Category extends BaseEntity {
 
     @Column({unique:true})
     public name:string;
+
+    @ManyToOne(type => Category, category => category.child_categories)
+    parent_category: Category;
+
+    @OneToMany(type => Category, category => category.parent_category)
+    child_categories: Category[];
 
     @CreateDateColumn({type:"timestamp",nullable:false})
     public created_at: Date;
