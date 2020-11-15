@@ -19,13 +19,13 @@ export class Comment extends BaseEntity {
     @Column()
     public content:string;
 
-    @ManyToOne(()=> User, user => user.comments)
+    @ManyToOne(()=> User, user => user.comments,)
     public author: User;
 
-    @ManyToOne(()=> Post, post => post.comments)
+    @ManyToOne(()=> Post, post => post.comments,)
     public post: Post;
 
-    @ManyToMany(() => User)
+    @ManyToMany(() => User, )
     @JoinTable()
     public likers: User[];
 

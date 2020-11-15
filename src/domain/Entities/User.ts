@@ -24,10 +24,10 @@ export class User extends BaseEntity {
     @Column()
     public password:string;
 
-    @OneToMany(()=> Post, post=> post.author)
+    @OneToMany(()=> Post, post=> post.author, {cascade:true})
     public posts:Post[];
 
-    @OneToMany(()=> Comment, comment=> comment.author)
+    @OneToMany(()=> Comment, comment=> comment.author, {cascade:true})
     public comments: Comment[];
 
     @CreateDateColumn({type:"timestamp",nullable:false})

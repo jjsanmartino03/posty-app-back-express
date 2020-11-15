@@ -8,6 +8,7 @@ import { CategoryController } from "./controllers/CategoryController";
 import { createConnection, Connection } from "typeorm";
 import { UserController } from "./controllers/UserController";
 import { PostController } from "./controllers/PostController";
+import { CommentController } from "./controllers/CommentController";
 
 @injectable()
 export class Router implements IRouter {
@@ -16,17 +17,20 @@ export class Router implements IRouter {
   private categoryController: CategoryController;
   private userController: UserController;
   private postController: PostController;
+  private commentController: CommentController;
 
   constructor(
     @inject(ExampleController) exampleController: ExampleController,
     @inject(CategoryController) categoryController: CategoryController,
     @inject(UserController) userController: UserController,
-    @inject(PostController) postController: PostController
+    @inject(PostController) postController: PostController,
+    @inject(CommentController) commentController: CommentController
   ) {
     this.categoryController = categoryController;
     this.exampleController = exampleController;
     this.userController = userController;
     this.postController = postController;
+    this.commentController = commentController;
   }
 
   public init(app: App) {
@@ -72,15 +76,16 @@ export class Router implements IRouter {
       .get(this.postController.getPost)
       .put(this.postController.updatePost);
 
+    // Comment routes ---------------
+    this.appInstance
+      .route("/posts/:post_id/comments/")
+      .get(this.commentController.getCommentsOfPost)
+      .post(this.commentController.createComment);
+
     this.appInstance
       .route("/examples")
       .get(this.exampleController.getAll.bind(this.exampleController))
       .post(this.exampleController.create.bind(this.exampleController));
-
-    this.appInstance
-      .route("/categories")
-      .post(this.categoryController.create.bind(this.categoryController))
-      .get(this.categoryController.showForm.bind(this.categoryController));
 
     this.appInstance
       .route("/examples/form")

@@ -40,7 +40,7 @@ export class PostController {
   public getPost = async (request: Request, response: Response) => {
     const postId: number = Number(request.params.id);
 
-    const post: Post = await Post.findOneOrFail(postId);
+    const post: Post = await Post.findOneOrFail(postId, {relations:["comments"]});
 
     response.json(post);
   };

@@ -29,14 +29,14 @@ export class Post extends BaseEntity {
   @ManyToOne(() => User, (user) => user.posts)
   public author: User;
 
-  @OneToMany(() => Comment, (comment) => comment.post)
+  @OneToMany(() => Comment, (comment) => comment.post, {cascade:true})
   public comments: Comment[];
 
-  @ManyToMany(() => Category)
+  @ManyToMany(() => Category, {cascade:true})
   @JoinTable()
   public categories: Category[];
 
-  @ManyToMany(() => User)
+  @ManyToMany(() => User,)
   @JoinTable()
   public likers: User[];
 

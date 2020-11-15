@@ -17,10 +17,10 @@ export class Category extends BaseEntity {
     @Column({unique:true})
     public name:string;
 
-    @ManyToOne(type => Category, category => category.child_categories)
+    @ManyToOne(type => Category, category => category.child_categories,)
     parent_category: Category;
 
-    @OneToMany(type => Category, category => category.parent_category)
+    @OneToMany(type => Category, category => category.parent_category,{cascade:true})
     child_categories: Category[];
 
     @CreateDateColumn({type:"timestamp",nullable:false})
