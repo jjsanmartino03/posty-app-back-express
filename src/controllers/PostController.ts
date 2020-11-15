@@ -20,7 +20,9 @@ export class PostController {
     const payload = request.body;
     const authorId: number = payload.author_id;
     const post: Post = new Post();
-    const categoriesIds: number[] = payload.categories;
+    const categoriesIds: number[] = payload.categories
+      ? payload.categories
+      : [];
     const categories: Category[] = [];
 
     for (let categoryId of categoriesIds) {
@@ -40,16 +42,28 @@ export class PostController {
   public getPost = async (request: Request, response: Response) => {
     const postId: number = Number(request.params.id);
 
-    const post: Post = await Post.findOneOrFail(postId, {relations:["comments"]});
+    const post: Post = await Post.findOneOrFail(postId, {
+      relations: ["comments", "categories", "author", "likers"],
+    });
 
-    response.json(post);
+    const serializedPost = {
+      id: post.id,
+      author_username: post.author.username,
+      comments: post.comments,
+      categories: post.categories,
+      total_likes: post.likers.length,
+    };
+
+    response.json(serializedPost);
   };
 
   public updatePost = async (request: Request, response: Response) => {
     const payload = request.body;
     const postId: number = Number(request.params.id);
     const post: Post = await Post.findOneOrFail(postId);
-    const categoriesIds: number[] = payload.categories;
+    const categoriesIds: number[] = payload.categories
+      ? payload.categories
+      : [];
 
     const categories: Category[] = [];
 
@@ -64,5 +78,39 @@ export class PostController {
     await post.save();
 
     response.send({ message: "Updated", post }).status(201);
+  };
+
+  public addLike = async (request: Request, response: Response) => {
+    const postId: number = Number(request.params.id);
+    const post: Post = await Post.findOneOrFail(postId, {
+      relations: ["likers"],
+    });
+    const giverId: number = request.body.giver_id;
+
+    let likeAlreadyExists: boolean = false;
+
+    for (let liker of post.likers) {
+      if (liker.id == giverId) {
+        likeAlreadyExists = true;
+        break;
+      }
+    }
+    if (!likeAlreadyExists) {
+      const giver: User = await User.findOneOrFail(giverId);
+      post.likers.push(giver);
+      await post.save();
+    }
+  };
+  public removeLike = async (request: Request, response: Response) => {
+    const postId: number = Number(request.params.id);
+    const post: Post = await Post.findOneOrFail(postId, {
+      relations: ["likers"],
+    });
+    const giverId: number = request.body.giver_id;
+
+    post.likers = post.likers.filter((liker) => liker.id !== giverId);
+
+    await post.save();
+    response.send({ message: "Like removed!" }).status(201);
   };
 }

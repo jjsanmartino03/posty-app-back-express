@@ -30,7 +30,7 @@ export class UserController {
   public getUserByUsername = async (request: Request, response: Response) => {
     const username: string = request.params.username;
 
-    const user: User = await User.findOneOrFail({ username: username });
+    const user: User = await User.findOneOrFail({ username: username }, {relations:["posts"]});
 
     response.json(user);
   };

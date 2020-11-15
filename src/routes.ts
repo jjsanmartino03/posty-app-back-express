@@ -76,6 +76,10 @@ export class Router implements IRouter {
       .get(this.postController.getPost)
       .put(this.postController.updatePost);
 
+    this.appInstance
+        .route("/posts/:id/likes")
+        .post(this.postController.addLike).delete(this.postController.removeLike);
+
     // Comment routes ---------------
     this.appInstance
       .route("/posts/:post_id/comments/")

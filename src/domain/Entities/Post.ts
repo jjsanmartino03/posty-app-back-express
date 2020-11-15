@@ -40,9 +40,9 @@ export class Post extends BaseEntity {
   @JoinTable()
   public likers: User[];
 
-  @CreateDateColumn({ type: "timestamp", nullable: false })
+  @CreateDateColumn({ type: "timestamp", nullable: false, })
   public created_at: Date;
 
-  @DeleteDateColumn({ type: "timestamp", nullable: true })
+  @DeleteDateColumn({ type: "timestamp", nullable: true, select:false })
   public deleted_at: Date;
 }
