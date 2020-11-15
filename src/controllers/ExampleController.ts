@@ -5,9 +5,6 @@ import TYPES from "../types";
 import {ExampleRepository} from "../domain/Repositories/ExampleRepository";
 import {Category} from "../domain/Entities/Category";
 
-const {TwingEnvironment, TwingLoaderFilesystem} = require('twing');
-let loader = new TwingLoaderFilesystem('src/views');
-let twing = new TwingEnvironment(loader);
 
 @injectable()
 export class ExampleController {
@@ -20,17 +17,10 @@ export class ExampleController {
     public async getAll(request: Request, response: Response) {
 
         let examples = await this.exampleRepository.findAll();
-
-        twing.render('examples.twing.html', {examples}).then((output: any) => {
-            response.end(output);
-        });
     };
 
     public async showExampleForm(req: Request, res: Response) {
         let categories = await Category.find();
-        twing.render('exampleForm.twing.html', {categories}).then((output: any) => {
-            res.end(output);
-        });
     }
 
     public async create(request: Request, response: Response) {

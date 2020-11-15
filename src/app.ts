@@ -4,7 +4,7 @@ import {injectable} from "inversify";
 @injectable()
 export class App {
   public app: Application;
-  public port: number | undefined;
+  public port: number;
 
   constructor() {
     this.app = express();
@@ -14,13 +14,9 @@ export class App {
     this.port = port;
   }
 
-  public setViewEngine(viewEngine: string) {
-    this.app.set('view engine', viewEngine);
-  }
-
   public listen() {
     this.app.listen(this.port, () => {
-      console.log(`Basic node + ts app listening on port ${this.port}`);
+      console.log(`Basic social media app (express + ts) listening on port ${this.port}`);
     });
   }
 
