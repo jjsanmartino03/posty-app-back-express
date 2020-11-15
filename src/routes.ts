@@ -82,6 +82,9 @@ export class Router implements IRouter {
       .get(this.commentController.getCommentsOfPost)
       .post(this.commentController.createComment);
 
+    // Category routes ---------------
+    this.appInstance.route("/categories").get(this.categoryController.getAll).post(this.categoryController.create);
+
     this.appInstance
       .route("/examples")
       .get(this.exampleController.getAll.bind(this.exampleController))

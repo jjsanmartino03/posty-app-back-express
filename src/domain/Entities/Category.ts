@@ -11,6 +11,12 @@ import {
 // TODO: add relationships
 @Entity()
 export class Category extends BaseEntity {
+    public getChildCategories = async () => {
+        this.child_categories = await Category.find({where:{parent_category: this}});
+        for (let category of this.child_categories){
+            await category.getChildCategories();
+        }
+    }
     @PrimaryGeneratedColumn()
     public id:number;
 
