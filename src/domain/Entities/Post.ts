@@ -2,12 +2,15 @@ import {BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryG
 
 // TODO: add relationships
 @Entity()
-export default class User extends BaseEntity {
+export default class Post extends BaseEntity {
     @PrimaryGeneratedColumn()
     public id:number;
 
-    @Column({unique:true})
-    public name:string;
+    @Column()
+    public title:string;
+
+    @Column()
+    public content:string;
 
     @CreateDateColumn({type:"timestamp",nullable:false})
     public created_at: Date;

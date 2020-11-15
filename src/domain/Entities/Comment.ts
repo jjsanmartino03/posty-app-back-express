@@ -6,8 +6,8 @@ export default class User extends BaseEntity {
     @PrimaryGeneratedColumn()
     public id:number;
 
-    @Column({unique:true})
-    public name:string;
+    @Column()
+    public content:string;
 
     @CreateDateColumn({type:"timestamp",nullable:false})
     public created_at: Date;
