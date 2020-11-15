@@ -2,7 +2,7 @@ import {BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryG
 
 // TODO: add relationships
 @Entity()
-export default class User extends BaseEntity {
+export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
     public id:number;
 

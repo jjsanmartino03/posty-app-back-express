@@ -1,13 +1,25 @@
-import {BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import {
+    BaseEntity,
+    Column,
+    CreateDateColumn,
+    DeleteDateColumn,
+    Entity,
+    ManyToOne,
+    PrimaryGeneratedColumn
+} from 'typeorm';
+import {User} from './User';
 
 // TODO: add relationships
 @Entity()
-export default class User extends BaseEntity {
+export class Comment extends BaseEntity {
     @PrimaryGeneratedColumn()
     public id:number;
 
     @Column()
     public content:string;
+
+    @ManyToOne(()=> User, user => user.comments)
+    public author: User;
 
     @CreateDateColumn({type:"timestamp",nullable:false})
     public created_at: Date;

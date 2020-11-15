@@ -1,8 +1,17 @@
-import {BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import {
+    BaseEntity,
+    Column,
+    CreateDateColumn,
+    DeleteDateColumn,
+    Entity,
+    OneToMany,
+    PrimaryGeneratedColumn
+} from 'typeorm';
+import {Post} from './Post';
+import {Comment} from './Comment';
 
-// TODO: add relationships
 @Entity()
-export default class User extends BaseEntity {
+export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
     public id:number;
 
@@ -14,6 +23,12 @@ export default class User extends BaseEntity {
 
     @Column()
     public password:string;
+
+    @OneToMany(()=> Post, post=> post.author)
+    public posts:Post[];
+
+    @OneToMany(()=> Comment, comment=> comment.author)
+    public comments: Comment[];
 
     @CreateDateColumn({type:"timestamp",nullable:false})
     public created_at: Date;
