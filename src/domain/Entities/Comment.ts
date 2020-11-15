@@ -3,7 +3,7 @@ import {
     Column,
     CreateDateColumn,
     DeleteDateColumn,
-    Entity,
+    Entity, JoinTable, ManyToMany,
     ManyToOne,
     PrimaryGeneratedColumn
 } from 'typeorm';
@@ -24,6 +24,10 @@ export class Comment extends BaseEntity {
 
     @ManyToOne(()=> Post, post => post.comments)
     public post: Post;
+
+    @ManyToMany(() => User)
+    @JoinTable()
+    public likers: User[];
 
     @CreateDateColumn({type:"timestamp",nullable:false})
     public created_at: Date;
