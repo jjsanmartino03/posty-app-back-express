@@ -7,6 +7,7 @@ import TYPES from "./types";
 import {TypeORMExampleRepository} from "./infrastructure/Persistence/TypeORMExampleRepository";
 import {CategoryController} from "./controllers/CategoryController";
 import {UserController} from './controllers/UserController';
+import {PostController} from './controllers/PostController';
 
 const DIContainer = new Container();
 
@@ -21,5 +22,6 @@ DIContainer.bind<ExampleRepository>(TYPES.ExampleRepository).to(TypeORMExampleRe
 DIContainer.bind<CategoryController>(CategoryController).toSelf();
 DIContainer.bind<ExampleController>(ExampleController).toSelf();
 DIContainer.bind<UserController>(UserController).toSelf();
+DIContainer.bind<PostController>(PostController).toSelf();
 
 export default DIContainer;
