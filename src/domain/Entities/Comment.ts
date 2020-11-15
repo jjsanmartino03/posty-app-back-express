@@ -8,6 +8,7 @@ import {
     PrimaryGeneratedColumn
 } from 'typeorm';
 import {User} from './User';
+import {Post} from './Post';
 
 // TODO: add relationships
 @Entity()
@@ -20,6 +21,9 @@ export class Comment extends BaseEntity {
 
     @ManyToOne(()=> User, user => user.comments)
     public author: User;
+
+    @ManyToOne(()=> Post, post => post.comments)
+    public post: Post;
 
     @CreateDateColumn({type:"timestamp",nullable:false})
     public created_at: Date;

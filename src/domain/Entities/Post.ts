@@ -1,17 +1,22 @@
 import {
-    BaseEntity,
-    Column,
-    CreateDateColumn,
-    DeleteDateColumn,
-    Entity,
-    ManyToOne,
-    PrimaryGeneratedColumn
-} from 'typeorm';
-import {User} from './User';
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { User } from "./User";
+import { Comment } from "./Comment";
+import { Category } from "./Category";
 
 // TODO: add relationships
 @Entity()
-export  class Post extends BaseEntity {
+export class Post extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id: number;
 
@@ -21,8 +26,19 @@ export  class Post extends BaseEntity {
   @Column()
   public content: string;
 
-  @ManyToOne(()=> User, user=> user.posts)
+  @ManyToOne(() => User, (user) => user.posts)
   public author: User;
+
+  @OneToMany(() => Comment, (comment) => comment.post)
+  public comments: Comment[];
+
+  @ManyToMany(() => Category)
+  @JoinTable()
+  public categories: Category[];
+
+  @ManyToMany(() => User)
+  @JoinTable()
+  public likers: User[];
 
   @CreateDateColumn({ type: "timestamp", nullable: false })
   public created_at: Date;
