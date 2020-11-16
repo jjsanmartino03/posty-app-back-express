@@ -13,21 +13,12 @@ import {
 import { User } from "./User";
 import { Comment } from "./Comment";
 import { Category } from "./Category";
+import {AbstractLikeableContentEntity} from './AbstractLikeableContentEntity';
 
-// TODO: add relationships
 @Entity()
-export class Post extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  public id: number;
-
+export class Post extends AbstractLikeableContentEntity {
   @Column()
   public title: string;
-
-  @Column()
-  public content: string;
-
-  @ManyToOne(() => User, (user) => user.posts)
-  public author: User;
 
   @OneToMany(() => Comment, (comment) => comment.post, {cascade:true})
   public comments: Comment[];
@@ -36,13 +27,6 @@ export class Post extends BaseEntity {
   @JoinTable()
   public categories: Category[];
 
-  @ManyToMany(() => User,)
-  @JoinTable()
-  public likers: User[];
 
-  @CreateDateColumn({ type: "timestamp", nullable: false, })
-  public created_at: Date;
 
-  @DeleteDateColumn({ type: "timestamp", nullable: true, select:false })
-  public deleted_at: Date;
 }

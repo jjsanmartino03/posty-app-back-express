@@ -9,9 +9,10 @@ import {
 } from 'typeorm';
 import {Post} from './Post';
 import {Comment} from './Comment';
+import {AbstractCommonEntity} from './AbstractCommonEntity';
 
 @Entity()
-export class User extends BaseEntity {
+export class User extends AbstractCommonEntity {
     @PrimaryGeneratedColumn()
     public id:number;
 
