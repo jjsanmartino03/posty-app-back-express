@@ -42,7 +42,7 @@ export class UserController {
       where: { username: username },
     });
 
-    user.username = payload.username ? payload.username : username;
+    user.username = payload.username;
     user.password = payload.password;
     user.email = payload.email;
 

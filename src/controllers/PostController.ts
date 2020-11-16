@@ -4,6 +4,7 @@ import { Post } from "../domain/Entities/Post";
 import { Connection, getConnection } from "typeorm";
 import { User } from "../domain/Entities/User";
 import { Category } from "../domain/Entities/Category";
+import {serialize} from 'v8';
 
 @injectable()
 export class PostController {
@@ -11,9 +12,15 @@ export class PostController {
     request: Request,
     response: Response
   ): Promise<void> => {
-    const posts: Post[] = await Post.find();
+    const posts: Post[] = await Post.find({relations:["author",]});
 
-    response.json(posts);
+    const serializedPosts = posts.map(post => ({
+      ...post,
+      author:undefined,
+      author_username: post.author.username,
+    }))
+
+    response.json(serializedPosts);
   };
 
   public savePost = async (request: Request, response: Response) => {
@@ -36,7 +43,14 @@ export class PostController {
 
     await post.save();
 
-    response.send({ message: "Created", post }).status(201);
+    const serializedPost = {
+      ...post,
+      author:undefined,
+      author_username: post.author.username,
+      categories: post.categories.map(cat => cat.name),
+    }
+
+    response.send({ message: "Created", post:serializedPost }).status(201);
   };
 
   public getPost = async (request: Request, response: Response) => {
@@ -50,8 +64,9 @@ export class PostController {
       id: post.id,
       author_username: post.author.username,
       comments: post.comments,
-      categories: post.categories,
+      categories: post.categories.map(cat=>cat.name),
       total_likes: post.likers.length,
+      created_at: post.created_at,
     };
 
     response.json(serializedPost);
@@ -102,6 +117,7 @@ export class PostController {
     }
     response.send({ message: "Like created!" }).status(201);
   };
+
   public removeLike = async (request: Request, response: Response) => {
     const postId: number = Number(request.params.id);
     const post: Post = await Post.findOneOrFail(postId, {

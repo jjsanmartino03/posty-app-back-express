@@ -47,12 +47,6 @@ export class Router implements IRouter {
   }
 
   private intializeRoutes() {
-    this.appInstance
-      .route("/")
-      .get((request: express.Request, response: express.Response) => {
-        response.send("Welcome to the node + typescript example");
-      });
-
     // User routes -----------------
 
     this.appInstance
@@ -101,10 +95,6 @@ export class Router implements IRouter {
       .route("/examples")
       .get(this.exampleController.getAll.bind(this.exampleController))
       .post(this.exampleController.create.bind(this.exampleController));
-
-    this.appInstance
-      .route("/examples/form")
-      .get(this.exampleController.showExampleForm.bind(this.exampleController));
   }
   private async initializeDBConnection() {
     // No le paso parámetros porque detecta automáticamente la configuración del archivo ormconfig.json
