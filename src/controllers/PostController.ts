@@ -100,6 +100,7 @@ export class PostController {
       post.likers.push(giver);
       await post.save();
     }
+    response.send({ message: "Like created!" }).status(201);
   };
   public removeLike = async (request: Request, response: Response) => {
     const postId: number = Number(request.params.id);
