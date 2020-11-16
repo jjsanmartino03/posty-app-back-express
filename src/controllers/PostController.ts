@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
 import { injectable } from "inversify";
 import { Post } from "../domain/Entities/Post";
-import { Connection, getConnection } from "typeorm";
 import { User } from "../domain/Entities/User";
 import { Category } from "../domain/Entities/Category";
-import {serialize} from 'v8';
 
 @injectable()
 export class PostController {

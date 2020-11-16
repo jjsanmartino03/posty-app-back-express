@@ -29,7 +29,13 @@ export class CommentController {
 
       await post.save();
 
-      response.send({message:"Comment Created!", comment}).status(201);
+      const serializedComment = {
+          ...comment,
+          author_username: comment.author.username,
+          author:undefined,
+      }
+
+      response.send({message:"Comment Created!", comment:serializedComment}).status(201);
   }
     public addLike = async (request: Request, response: Response) => {
         const commentId: number = Number(request.params.id);
