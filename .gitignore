@@ -1,3 +1,4 @@
 .idea/
 .ormconfig.json
+node_modules/
 

@@ -6,6 +6,9 @@ import {ExampleRepository} from "./domain/Repositories/ExampleRepository";
 import TYPES from "./types";
 import {TypeORMExampleRepository} from "./infrastructure/Persistence/TypeORMExampleRepository";
 import {CategoryController} from "./controllers/CategoryController";
+import {UserController} from './controllers/UserController';
+import {PostController} from './controllers/PostController';
+import {CommentController} from './controllers/CommentController';
 
 const DIContainer = new Container();
 
@@ -19,5 +22,8 @@ DIContainer.bind<ExampleRepository>(TYPES.ExampleRepository).to(TypeORMExampleRe
 // Controllers
 DIContainer.bind<CategoryController>(CategoryController).toSelf();
 DIContainer.bind<ExampleController>(ExampleController).toSelf();
+DIContainer.bind<UserController>(UserController).toSelf();
+DIContainer.bind<PostController>(PostController).toSelf();
+DIContainer.bind<CommentController>(CommentController).toSelf();
 
 export default DIContainer;

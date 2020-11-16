@@ -1,5 +1,5 @@
 # node-typescript
-Basic configuration for a NodeJs + TypeScript project
+Basic configuration for a NodeJs + TypeScript project API
 
 This project provides a simple scaffold for node applications with typescript. It includes an example controller, DI implementation and router.
 
