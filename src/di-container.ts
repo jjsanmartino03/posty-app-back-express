@@ -12,6 +12,9 @@ import {CommentController} from './infrastructure/controllers/CommentController'
 import {IUserRepository} from './domain/Repositories/IUserRepository';
 import {TypeORMUserRepository} from './infrastructure/Persistence/TypeORMUserRepository';
 import {UserService} from './application/Services/UserService';
+import {IPostRepository} from './domain/Repositories/IPostRepository';
+import {TypeORMPostRepository} from './infrastructure/Persistence/TypeORMPostRepository';
+import {PostService} from './application/Services/PostService';
 
 const DIContainer = new Container();
 
@@ -19,10 +22,12 @@ const DIContainer = new Container();
 DIContainer.bind<App>(App).toSelf();
 DIContainer.bind<Router>(Router).toSelf();
 DIContainer.bind<UserService>(UserService).toSelf();
+DIContainer.bind<PostService>(PostService).toSelf();
 
 // Repositories
 DIContainer.bind<ExampleRepository>(TYPES.ExampleRepository).to(TypeORMExampleRepository);
 DIContainer.bind<IUserRepository>(TYPES.IUserRepository).to(TypeORMUserRepository);
+DIContainer.bind<IPostRepository>(TYPES.IPostRepository).to(TypeORMPostRepository);
 
 // Controllers
 DIContainer.bind<CategoryController>(CategoryController).toSelf();

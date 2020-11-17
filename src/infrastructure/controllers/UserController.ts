@@ -72,9 +72,10 @@ export class UserController {
 
     response.send({ message: "Updated", user }).status(201);
   };
-  public destroy = async (request: Request, response: Response) => {
+  // Por ahora no se pueden borrar
+  /*public destroy = async (request: Request, response: Response) => {
     const username: string = request.params.username;
     const user = await this.userService.destroy(username);
     response.send({ message: "User Deleted", user });
-  };
+  };*/
 }

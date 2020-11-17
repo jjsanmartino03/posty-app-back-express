@@ -62,8 +62,8 @@ export class Router implements IRouter {
     this.appInstance
       .route("/users/:username")
       .get(this.userController.getUserByUsername)
-      .put(this.userController.update)
-      .delete(this.userController.destroy);
+      .put(this.userController.update);
+      //.delete(this.userController.destroy);
 
     // Post routes ---------------
     this.appInstance

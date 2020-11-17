@@ -32,14 +32,15 @@ export class UserService{
         await this.userRepository.save(user);
         return user;
     }
-    public async destroy(username:string):Promise<User>{
+    // Por ahora no se puede borrar un usuario
+    /*public async destroy(username:string):Promise<User>{
         // todo: delete relationships also https://typeorm.io/#/relational-query-builder
         const user: User = await this.userRepository.findByUsername(username);
 
         await this.userRepository.softDelete(user);
 
         return user;
-    }
+    }*/
 
 
 }
