@@ -18,6 +18,9 @@ import {PostService} from './application/Services/PostService';
 import {CommentService} from './application/Services/CommentService';
 import {ICommentRepository} from './domain/Repositories/ICommentRepository';
 import {TypeORMCommentRepository} from './infrastructure/Persistence/TypeORMCommentRepository';
+import {TypeORMCategoryRepository} from './infrastructure/Persistence/TypeORMCategoryRepository';
+import {ICategoryRepository} from './domain/Repositories/ICategoryRepository';
+import {CategoryService} from './application/Services/CategoryService';
 
 const DIContainer = new Container();
 
@@ -27,12 +30,14 @@ DIContainer.bind<Router>(Router).toSelf();
 DIContainer.bind<UserService>(UserService).toSelf();
 DIContainer.bind<PostService>(PostService).toSelf();
 DIContainer.bind<CommentService>(CommentService).toSelf();
+DIContainer.bind<CategoryService>(CategoryService).toSelf();
 
 // Repositories
 DIContainer.bind<ExampleRepository>(TYPES.ExampleRepository).to(TypeORMExampleRepository);
 DIContainer.bind<IUserRepository>(TYPES.IUserRepository).to(TypeORMUserRepository);
 DIContainer.bind<IPostRepository>(TYPES.IPostRepository).to(TypeORMPostRepository);
 DIContainer.bind<ICommentRepository>(TYPES.ICommentRepository).to(TypeORMCommentRepository);
+DIContainer.bind<ICategoryRepository>(TYPES.ICategoryRepository).to(TypeORMCategoryRepository);
 
 // Controllers
 DIContainer.bind<CategoryController>(CategoryController).toSelf();
