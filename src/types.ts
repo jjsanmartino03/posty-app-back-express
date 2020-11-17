@@ -1,4 +1,5 @@
 let TYPES = {
+    IUserRepository: Symbol("IUserRepository"),
     ExampleRepository: Symbol("ExampleRepository")
 };
 
