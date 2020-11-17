@@ -15,7 +15,7 @@ export class PostService {
     public async create(title:string, authorId:number, content:string, categoriesIds: number[]=[]): Promise<Post>{
         const post: Post = new Post();
         // Obtener las ids de las categorías del post
-
+        //todo: está bien manejar las relaciones así en un service?
         const categories: Category[] = [];
         // buscar todas las categorias del post por sus ids (hay otra forma más liviana de hacerlo pero es con el query
         // builder)
@@ -52,11 +52,4 @@ export class PostService {
         return post;
     }
 
-    public async addLike(id:number, giverId:number){
-        await getConnection()
-            .createQueryBuilder()
-            .relation(Post, "likers")
-            .of(id)
-            .add(giverId);
-    }
 }
