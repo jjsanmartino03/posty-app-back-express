@@ -1,9 +1,9 @@
 import {Request, Response} from 'express';
 import {inject, injectable} from "inversify";
-import {Example} from "../domain/Entities/Example";
-import TYPES from "../types";
-import {ExampleRepository} from "../domain/Repositories/ExampleRepository";
-import {Category} from "../domain/Entities/Category";
+import {Example} from "../../domain/Entities/Example";
+import TYPES from "../../types";
+import {ExampleRepository} from "../../domain/Repositories/ExampleRepository";
+import {Category} from "../../domain/Entities/Category";
 
 
 @injectable()

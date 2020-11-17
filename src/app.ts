@@ -1,6 +1,7 @@
 import express, {Application} from 'express';
 import {injectable} from "inversify";
 
+// Es injeble, se puede (poner) en un DIContainer
 @injectable()
 export class App {
   public app: Application;
