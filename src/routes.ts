@@ -1,24 +1,27 @@
 import * as express from "express";
-import { ExampleController } from "./controllers/ExampleController";
+import { ExampleController } from "./infrastructure/controllers/ExampleController";
 import bodyParser from "body-parser";
 import { App } from "./app";
 import { inject, injectable } from "inversify";
 import { IRouter } from "./interfaces/router.interface";
-import { CategoryController } from "./controllers/CategoryController";
+import { CategoryController } from "./infrastructure/controllers/CategoryController";
 import { createConnection, Connection } from "typeorm";
-import { UserController } from "./controllers/UserController";
-import { PostController } from "./controllers/PostController";
-import { CommentController } from "./controllers/CommentController";
+import { UserController } from "./infrastructure/controllers/UserController";
+import { PostController } from "./infrastructure/controllers/PostController";
+import { CommentController } from "./infrastructure/controllers/CommentController";
 
 @injectable()
 export class Router implements IRouter {
   private appInstance: express.Application;
+  private DBconnection: Connection;
+  // Todos los controller son dependencias del router, que se inyectan en el constructor
   private exampleController: ExampleController;
   private categoryController: CategoryController;
   private userController: UserController;
   private postController: PostController;
   private commentController: CommentController;
 
+  // Traer todas las dependencies a través de inversify
   constructor(
     @inject(ExampleController) exampleController: ExampleController,
     @inject(CategoryController) categoryController: CategoryController,
@@ -37,7 +40,9 @@ export class Router implements IRouter {
     this.appInstance = app.getAppInstance();
 
     this.initializeMiddlewares();
+    // Setear las diversas rutas
     this.intializeRoutes();
+    // Crear la conexión con la base de datos
     this.initializeDBConnection();
   }
 
@@ -51,24 +56,24 @@ export class Router implements IRouter {
 
     this.appInstance
       .route("/users")
-      .get(this.userController.getAll)
-      .post(this.userController.saveUser);
+      .get(this.userController.index)
+      .post(this.userController.create);
 
     this.appInstance
       .route("/users/:username")
       .get(this.userController.getUserByUsername)
-      .put(this.userController.updateUser);
+      .put(this.userController.update);
 
     // Post routes ---------------
     this.appInstance
       .route("/posts")
-      .get(this.postController.getAll)
-      .post(this.postController.savePost);
+      .get(this.postController.index)
+      .post(this.postController.create);
 
     this.appInstance
       .route("/posts/:id")
-      .get(this.postController.getPost)
-      .put(this.postController.updatePost);
+      .get(this.postController.show)
+      .put(this.postController.update);
 
     this.appInstance
       .route("/posts/:id/likes")
@@ -98,10 +103,10 @@ export class Router implements IRouter {
   }
   private async initializeDBConnection() {
     // No le paso parámetros porque detecta automáticamente la configuración del archivo ormconfig.json
-    const connection: Connection = await createConnection();
-    if (connection === undefined) {
+    this.DBconnection = await createConnection();
+    if (this.DBconnection === undefined) {
       throw new Error("Error connecting to database");
     }
-    await connection.synchronize();
+    await this.DBconnection.synchronize();
   }
 }

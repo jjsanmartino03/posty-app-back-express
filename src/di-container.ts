@@ -1,14 +1,14 @@
 import {Container} from "inversify";
 import {Router} from "./routes";
 import {App} from "./app";
-import {ExampleController} from "./controllers/ExampleController";
+import {ExampleController} from "./infrastructure/controllers/ExampleController";
 import {ExampleRepository} from "./domain/Repositories/ExampleRepository";
 import TYPES from "./types";
 import {TypeORMExampleRepository} from "./infrastructure/Persistence/TypeORMExampleRepository";
-import {CategoryController} from "./controllers/CategoryController";
-import {UserController} from './controllers/UserController';
-import {PostController} from './controllers/PostController';
-import {CommentController} from './controllers/CommentController';
+import {CategoryController} from "./infrastructure/controllers/CategoryController";
+import {UserController} from './infrastructure/controllers/UserController';
+import {PostController} from './infrastructure/controllers/PostController';
+import {CommentController} from './infrastructure/controllers/CommentController';
 
 const DIContainer = new Container();
 

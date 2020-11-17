@@ -1,8 +1,8 @@
 import { injectable } from "inversify";
 import { Request, Response } from "express";
-import { Post } from "../domain/Entities/Post";
-import { Comment } from "../domain/Entities/Comment";
-import {User} from '../domain/Entities/User';
+import { Post } from "../../domain/Entities/Post";
+import { Comment } from "../../domain/Entities/Comment";
+import {User} from '../../domain/Entities/User';
 
 @injectable()
 export class CommentController {
