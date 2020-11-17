@@ -9,7 +9,7 @@ import { IUserRepository } from "../../domain/Repositories/IUserRepository";
 @injectable()
 export class UserController {
   private userService: UserService;
-  private userRepository: IUserRepository
+  private userRepository: IUserRepository;
   constructor(
     @inject(TYPES.IUserRepository) userRepository: IUserRepository,
     @inject(UserService) userService: UserService
@@ -30,19 +30,19 @@ export class UserController {
   public create = async (request: Request, response: Response) => {
     const payload = request.body;
     // crear un usuario vacio
-    const user: User = new User();
+    const user: User = await this.userService.create(
+      payload.username,
+      payload.email,
+      payload.password
+    );
 
-    user.username = payload.username;
-    user.email = payload.email;
-    user.password = payload.password;
-
-    await user.save();
-
+    // Adaptar el usuario según como lo quiero mostrar en la response
     const serializedUser = {
       ...user,
       deleted_at: undefined,
       password: undefined,
     };
+
     // Usuario creado con éxito
     response
       .send({ message: "User created", user: serializedUser })
@@ -52,10 +52,9 @@ export class UserController {
   public getUserByUsername = async (request: Request, response: Response) => {
     const username: string = request.params.username;
     // obtener el usuario de la base de datos
-    const user: User = await User.findOneOrFail(
-      { username: username },
-      { relations: ["posts"] }
-    );
+    const user: User = await this.userRepository.findByUsername(username, [
+      "posts",
+    ]);
 
     response.json(user);
   };
@@ -63,16 +62,19 @@ export class UserController {
   public update = async (request: Request, response: Response) => {
     const payload = request.body;
     const username: string = request.params.username;
-    const user: User = await User.findOneOrFail({
-      where: { username: username },
-    });
-    // cambiar sus propiedades
-    user.username = payload.username;
-    user.password = payload.password;
-    user.email = payload.email;
-    // guardar los cambios
-    await user.save();
+
+    const user: User = await this.userService.update(
+      username,
+      payload.username,
+      payload.email,
+      payload.password
+    );
 
     response.send({ message: "Updated", user }).status(201);
+  };
+  public destroy = async (request: Request, response: Response) => {
+    const username: string = request.params.username;
+    const user = await this.userService.destroy(username);
+    response.send({ message: "User Deleted", user });
   };
 }
