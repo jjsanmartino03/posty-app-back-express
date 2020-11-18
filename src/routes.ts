@@ -1,4 +1,4 @@
-import * as express from "express";
+import express from "express";
 import { ExampleController } from "./infrastructure/controllers/ExampleController";
 import bodyParser from "body-parser";
 import { App } from "./app";
@@ -9,17 +9,26 @@ import { createConnection, Connection } from "typeorm";
 import { UserController } from "./infrastructure/controllers/UserController";
 import { PostController } from "./infrastructure/controllers/PostController";
 import { CommentController } from "./infrastructure/controllers/CommentController";
+import { AuthenticationService } from "./infrastructure/Services/AuthenticationService";
+import passport from "passport";
+import session from "express-session";
+import {User} from './domain/Entities/User';
+import {Strategy} from 'passport-local';
+import {IUserRepository} from './domain/Repositories/IUserRepository';
+import TYPES from './types';
 
 @injectable()
 export class Router implements IRouter {
   private appInstance: express.Application;
   private DBconnection: Connection;
+  private authenticationService: AuthenticationService;
   // Todos los controller son dependencias del router, que se inyectan en el constructor
   private exampleController: ExampleController;
   private categoryController: CategoryController;
   private userController: UserController;
   private postController: PostController;
   private commentController: CommentController;
+  private userRepository: IUserRepository;
 
   // Traer todas las dependencies a través de inversify
   constructor(
@@ -27,31 +36,56 @@ export class Router implements IRouter {
     @inject(CategoryController) categoryController: CategoryController,
     @inject(UserController) userController: UserController,
     @inject(PostController) postController: PostController,
-    @inject(CommentController) commentController: CommentController
+    @inject(CommentController) commentController: CommentController,
+    @inject(AuthenticationService) authenticationService: AuthenticationService,
+    @inject(TYPES.IUserRepository)userRepository: IUserRepository,
   ) {
     this.categoryController = categoryController;
     this.exampleController = exampleController;
     this.userController = userController;
     this.postController = postController;
     this.commentController = commentController;
+    this.authenticationService = authenticationService;
+    this.userRepository = userRepository;
   }
 
   public init(app: App) {
     this.appInstance = app.getAppInstance();
 
     this.initializeMiddlewares();
-    // Setear las diversas rutas
-    this.intializeRoutes();
     // Crear la conexión con la base de datos
     this.initializeDBConnection();
+    // Setear las diversas rutas
+    this.intializeRoutes();
   }
 
-  private initializeMiddlewares() {
+  private async initializeMiddlewares() {
     this.appInstance.use(bodyParser.urlencoded({ extended: true }));
     this.appInstance.use(bodyParser.json());
+    this.appInstance.use(
+      session({
+        secret: process.env.SESSION_SECRET|| "keyboard cat",
+        resave: false,
+        saveUninitialized: false,
+      })
+    );
+    this.authenticationService.setup(this.appInstance);
+
+
+
   }
 
   private intializeRoutes() {
+    // authentication ---------------
+    this.appInstance.post(
+      "/login",
+      passport.authenticate("local", {
+        successRedirect:"/posts",
+      }),
+        function (req,res){
+        res.json({hola:"que tal"});
+        }
+    );
     // User routes -----------------
 
     this.appInstance
@@ -63,7 +97,7 @@ export class Router implements IRouter {
       .route("/users/:username")
       .get(this.userController.getUserByUsername)
       .put(this.userController.update);
-      //.delete(this.userController.destroy);
+    //.delete(this.userController.destroy);
 
     // Post routes ---------------
     this.appInstance

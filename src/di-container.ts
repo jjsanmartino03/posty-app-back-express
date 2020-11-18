@@ -21,16 +21,19 @@ import {TypeORMCommentRepository} from './infrastructure/Persistence/TypeORMComm
 import {TypeORMCategoryRepository} from './infrastructure/Persistence/TypeORMCategoryRepository';
 import {ICategoryRepository} from './domain/Repositories/ICategoryRepository';
 import {CategoryService} from './application/Services/CategoryService';
+import {AuthenticationService} from './infrastructure/Services/AuthenticationService';
 
 const DIContainer = new Container();
 
 // Services
-DIContainer.bind<App>(App).toSelf();
+DIContainer.bind<App>(App).toSelf().inSingletonScope();
 DIContainer.bind<Router>(Router).toSelf();
 DIContainer.bind<UserService>(UserService).toSelf();
 DIContainer.bind<PostService>(PostService).toSelf();
 DIContainer.bind<CommentService>(CommentService).toSelf();
 DIContainer.bind<CategoryService>(CategoryService).toSelf();
+
+DIContainer.bind<AuthenticationService>(AuthenticationService).toSelf();
 
 // Repositories
 DIContainer.bind<ExampleRepository>(TYPES.ExampleRepository).to(TypeORMExampleRepository);

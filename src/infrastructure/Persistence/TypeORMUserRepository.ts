@@ -19,4 +19,7 @@ export class TypeORMUserRepository implements IUserRepository {
   public async softDelete(user:User){
     await user.softRemove();
   }
+  public async findById(id:number):Promise<User>{
+    return await User.findOneOrFail(id);
+  }
 }
