@@ -17,7 +17,7 @@ export class User extends AbstractCommonEntity {
     @Column({unique:true})
     public username:string;
 
-    @Column()
+    @Column({unique:true})
     public email:string;
 
     @Column()

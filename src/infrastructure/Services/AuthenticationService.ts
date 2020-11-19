@@ -4,7 +4,7 @@ import { IUserRepository } from "../../domain/Repositories/IUserRepository";
 import { User } from "../../domain/Entities/User";
 import TYPES from "../../types";
 import passport, {PassportStatic} from 'passport';
-import e from 'express';
+import e, {Request} from 'express';
 
 @injectable()
 export class AuthenticationService {
@@ -12,6 +12,25 @@ export class AuthenticationService {
   private userRepository: IUserRepository;
   constructor(@inject(TYPES.IUserRepository) userRepository: IUserRepository) {
     this.userRepository = userRepository;
+  }
+  public verifyRegistration = async (
+      request: Request,
+      username:string,
+      password:string,
+      done: Function
+  ) => {
+    try {
+      const user: User = new User();
+      user.username = username;
+      user.email = request.body.email;
+      user.password = password;
+
+      await this.userRepository.save(user);
+
+      return done(null, user);
+    } catch (error) {
+      return done(error);
+    }
   }
   public verifyCallback = async  (
     username: string,
@@ -43,7 +62,8 @@ export class AuthenticationService {
     }
   };
   public setup = (appInstance:e.Application) =>{
-    passport.use("local", new Strategy(this.verifyCallback));
+    passport.use("local-login", new Strategy(this.verifyCallback));
+    passport.use("local-signup", new Strategy({passReqToCallback:true}, this.verifyRegistration));
     passport.serializeUser(this.serializeUser);
     passport.deserializeUser(this.deserializeUser);
     appInstance.use(passport.initialize());

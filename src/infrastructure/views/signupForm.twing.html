@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="icon" href="/pen-icon.svg"/>
+
+    <title>Log In</title>
+</head>
+<body>
+{% include "navbar.twing.html" with {"loginActive":"active"} %}
+<div
+        class="container-md d-flex pb-4 mt-5 align-items-center justify-content-center h-100 flex-column"
+>
+    <h1 class="text-center mt-4">Sign up to Posty App</h1>
+    <div class="container d-flex flex-column main mt-3">
+        <form action="http://localhost:3333/signup" method="POST">
+
+            <div class="form-group">
+                <label for="usernameInput">Username</label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">@</span>
+                    </div>
+
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="usernameInput"
+                            name="username"
+                            placeholder="Write your username..."
+                    />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="emailInput">Email</label>
+                <input
+                        type="email"
+                        class="form-control"
+                        id="emailInput"
+                        name="email"
+                        placeholder="Only the email is left..."
+                />
+            </div>
+            <div class="form-group">
+                <label for="passwordInput">Password</label>
+                <input
+                        type="password"
+                        class="form-control"
+                        id="passwordInput"
+                        name="password"
+                        placeholder="Type your password"
+                />
+            </div>
+
+
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary px-5">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="/js/jquery-3.5.1.slim.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

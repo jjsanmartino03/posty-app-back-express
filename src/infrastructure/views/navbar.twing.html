@@ -1,7 +1,7 @@
 <nav
   class="navbar navbar-expand-md navbar-light sticky-top d-flex justify-content-md-around bg-light"
 >
-  <a class="navbar-brand d-flex align-items-center" href="http://localhost:3333"><img width="25" class="mr-1" src="/pen-icon.svg"/>Posty App</a>
+  <a class="navbar-brand d-flex align-items-center" href="/"><img width="25" class="mr-1" src="/pen-icon.svg"/>Posty App</a>
   <button
     class="navbar-toggler"
     type="button"
@@ -17,20 +17,21 @@
   <div class="collapse navbar-collapse flex-grow-0" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item {{ homeActive }}">
-        <a class="nav-link" href="http://localhost:3333"
+        <a class="nav-link" href="/"
           >Home <span class="sr-only"></span
         ></a>
       </li>
       <li class="nav-item {{ loginActive }}">
-        <a class="nav-link" href="http://localhost:3333/login"
+        <a class="nav-link" href="
+        /login"
           >Login <span class="sr-only"></span
         ></a>
       </li>
       <li class="nav-item {{usersActive}}">
-        <a class="nav-link" href="http://localhost:3333/users">Users</a>
+        <a class="nav-link" href="/users">Users</a>
       </li>
       <li class="nav-item {{postsActive}}">
-        <a class="nav-link" href="http://localhost:3333/users">Create post</a>
+        <a class="nav-link" href="/users">Create post</a>
       </li>
         {% if user %}
         <li class="nav-item dropdown">

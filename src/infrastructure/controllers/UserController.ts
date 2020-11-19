@@ -26,6 +26,10 @@ export class UserController {
     const loginForm: string = await this.viewRenderService.login();
     response.end(loginForm);
   }
+  public signupForm = async (request:Request, response: Response) => {
+    const signupForm: string = await this.viewRenderService.signup();
+    response.end(signupForm);
+  }
   // Devolver todos los usuarios
   public index = async (
     request: Request,
@@ -53,9 +57,7 @@ export class UserController {
     };
 
     // Usuario creado con éxito
-    response
-      .send({ message: "User created", user: serializedUser })
-      .status(201);
+    response.redirect("/login", )
   };
   // traer usuario con el username
   public getUserByUsername = async (request: Request, response: Response) => {

@@ -78,18 +78,21 @@ export class Router implements IRouter {
     this.appInstance
       .route("/login")
       .post(
-        passport.authenticate("local", {
+        passport.authenticate("local-login", {
           failureRedirect: "/login",
           successRedirect: "/",
         })
       )
       .get(this.userController.loginForm);
     // User routes -----------------
+    this.appInstance.route("/signup").get(this.userController.signupForm).post(passport.authenticate('local-signup', {
+      successRedirect : '/', // redirect to the secure profile section
+      failureRedirect : '/signup', // redirect back to the signup page if there is an error
+    }));
 
     this.appInstance
       .route("/users")
       .get(this.userController.index)
-      .post(this.userController.create);
 
     this.appInstance
       .route("/users/:username")

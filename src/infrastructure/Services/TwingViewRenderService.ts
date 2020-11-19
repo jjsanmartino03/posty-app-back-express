@@ -14,4 +14,7 @@ export class TwingViewRenderService {
   public async login(): Promise<string> {
     return await twing.render("loginForm.twing.html");
   }
+  public async signup(): Promise<string>{
+    return await twing.render("signupForm.twing.html");
+  }
 }
