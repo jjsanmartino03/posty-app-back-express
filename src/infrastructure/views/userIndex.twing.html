@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link rel="icon" href="/pen-icon.svg" />
+
+    <title>Log In</title>
+  </head>
+  <body>
+    <!-- todo: add likes possibility for posts
+todo: add link to single post -->
+    {% include "navbar.twing.html" with {"usersActive":"active", "user":user} %}
+    <div
+      class="container-md d-flex pb-4 mt-5 align-items-center justify-content-center h-100 flex-column"
+    >
+      <header
+        class="d-flex flex-md-row flex-column flex-row align-items-md-end justify-content-md-between w-100 align-items-center mb-4"
+      >
+        <h1 class="text-center">Users Index</h1>
+        <h3><a href="/users/{{user.username}}">Your profile</a></h3>
+      </header>
+      <div
+        class="container-md d-flex flex-column align-items-center main-content mt-3"
+      >
+        {% for serializedUser in users %}
+        <!-- todo: make post a single view to embed -->
+        <div
+          class="card mb-3 w-100 border-success text-white bg-dark"
+          style="width: 18rem"
+        >
+          <h6 class="card-header d-flex justify-content-between">
+            <p class="text-danger m-0">@{{serializedUser.username}}</p>
+            <a class="text-info" href="/users/{{serializedUser.username}}"
+              >Profile</a
+            >
+          </h6>
+
+          <div class="card-body">
+            <p class="card-text">
+              Created at: {{serializedUser.created_at|date("m/d/Y")}}
+            </p>
+            <p class="card-text">Total posts: {{serializedUser.total_posts}}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% include "css-and-js.twing.html" %}
+  </body>
+</html>

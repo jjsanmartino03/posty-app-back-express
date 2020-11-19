@@ -4,18 +4,27 @@ import { Category } from "../../domain/Entities/Category";
 import { ICategoryRepository } from "../../domain/Repositories/ICategoryRepository";
 import TYPES from "../../types";
 import { CategoryService } from "../../application/Services/CategoryService";
+import {TwingViewRenderService} from '../Services/TwingViewRenderService';
 
 @injectable()
 export class CategoryController {
   private categoryRepository: ICategoryRepository;
   private categoryService: CategoryService;
+  private viewRenderService: TwingViewRenderService;
   constructor(
     @inject(TYPES.ICategoryRepository) categoryRepository: ICategoryRepository,
-    @inject(CategoryService) categoryService: CategoryService
+    @inject(CategoryService) categoryService: CategoryService,
+    @inject(TwingViewRenderService) viewRenderService: TwingViewRenderService
   ) {
     this.categoryRepository = categoryRepository;
     this.categoryService = categoryService;
+    this.viewRenderService = viewRenderService;
   }
+  public categoryForm = async (request:Request, response:Response)=>{
+    const categories: Category[] = await this.categoryRepository.getAll();
+    const categoryForm: string = await this.viewRenderService.categoryForm(request.user, categories);
+    response.end(categoryForm);
+}
   public getAll = async (request: Request, response: Response) => {
     const categories: Category[] = await this.categoryRepository.getCategoriesTree();
 

@@ -39,9 +39,16 @@ export class UserController {
     request: Request,
     response: Response
   ): Promise<void> => {
-    const users: User[] = await this.userRepository.findAll();
+    const users: User[] = await this.userRepository.findAll(["posts"]);
 
-    response.json(users);
+    const serializedUsers = users.map(user=>({
+      ...user,
+      posts: undefined,
+      total_posts: user.posts.length,
+    }));
+
+    const userIndex: string = await this.viewRenderService.userIndex(request.user, serializedUsers);
+    response.end(userIndex);
   };
   // crear un usuario
   public create = async (request: Request, response: Response) => {

@@ -77,16 +77,6 @@ export class PostController {
       categories,
     );
     response.redirect("/");
-    // adaptar el post a lo que quiero devolver en la response
-    const serializedPost = {
-      ...post,
-      author: undefined,
-      author_username: post.author.username,
-      categories: post.categories.map((cat) => cat.name),
-      deleted_at: undefined,
-    };
-
-    response.send({ message: "Created", post: serializedPost }).status(201);
   };
   // obtener un post por el id
   public show = async (request: Request, response: Response) => {

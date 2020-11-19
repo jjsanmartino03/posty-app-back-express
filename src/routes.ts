@@ -142,8 +142,8 @@ export class Router implements IRouter {
     // Category routes ---------------
     this.appInstance
       .route("/categories")
-      .get(this.categoryController.getAll)
-      .post(this.categoryController.create);
+      .get(this.authenticationService.userLoggedIn, this.categoryController.categoryForm)
+      .post(this.authenticationService.userLoggedIn, this.categoryController.create);
 
     this.appInstance
       .route("/examples")

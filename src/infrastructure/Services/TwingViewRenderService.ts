@@ -23,4 +23,10 @@ export class TwingViewRenderService {
   public async postForm(user:any, rootCategories:any):Promise<string>{
     return await twing.render("postForm.twing.html", {user, categories:rootCategories});
   }
+  public async categoryForm(user:any, categories:any):Promise<string>{
+    return await twing.render("categoryForm.twing.html", {user, categories});
+  }
+  public async userIndex(user:any, users:any):Promise<string>{
+    return await twing.render("userIndex.twing.html", {user, users});
+  }
 }
