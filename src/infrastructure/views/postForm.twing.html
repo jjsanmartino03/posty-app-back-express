@@ -14,7 +14,7 @@
     <title>Log In</title>
 </head>
 <body>
-{% include "navbar.twing.html" %}
+{% include "navbar.twing.html" with {"createPostActive":"active"} %}
 <div
         class="container-md d-flex pb-4 mt-5 align-items-center justify-content-center h-100 flex-column"
 >
@@ -23,29 +23,25 @@
         <form action="/signup" method="POST">
 
             <div class="form-group">
-                <label for="usernameInput">Username</label>
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1">@</span>
-                    </div>
+                <label for="titleInput">Title</label>
 
                     <input
                             type="text"
                             class="form-control"
-                            id="usernameInput"
-                            name="username"
-                            placeholder="Write your username..."
+                            id="titleInput"
+                            name="title"
+                            placeholder="Write the title..."
                     />
-                </div>
             </div>
             <div class="form-group">
-                <label for="emailInput">Email</label>
+                <label for="contentInput">Content</label>
+
                 <input
-                        type="email"
+                        type="text"
                         class="form-control"
-                        id="emailInput"
-                        name="email"
-                        placeholder="Only the email is left..."
+                        id="contentInput"
+                        name="content"
+                        placeholder="Write the content..."
                 />
             </div>
             <div class="form-group">

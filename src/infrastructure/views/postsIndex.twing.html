@@ -9,7 +9,6 @@
     />
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link rel="icon" href="/pen-icon.svg"/>
 
     <title>Log In</title>
@@ -23,35 +22,17 @@
     >
       <header class="d-flex flex-md-row flex-column flex-row align-items-md-end justify-content-md-between w-100 align-items-center mb-4">
         <h1 class="text-center">Posts Index</h1>
-        <h3><a href="http://localhost:3333/login">Create a post</a></h3>
+        <h3><a href="/posts">Create a post</a></h3>
       </header>
       <div
               class="container-md d-flex flex-column align-items-center main-content mt-3"
       >
       {% for post in posts %}
-
-
-          <div class="card mb-3 w-100 border-success text-white bg-dark" style="width: 18rem">
-            <h6 class="card-header d-flex justify-content-between">
-              <a class="text-danger" href="/users/{{post.author_username}}"
-              >@{{post.author_username}}</a
-              >
-              <a href="/posts/{{post.id}}">See post with comments</a>
-            </h6>
-            <div class="card-body">
-              <h5 class="card-title text-center">{{post.title}}</h5>
-              <p class="card-text">{{post.content}}</p>
-            </div>
-            <div class="card-footer pb-0">
-              <h6 href="#" class="card-link">{{post.total_likes}} likes</h6>
-            </div>
-          </div>
+        <!-- todo: make post a single view to embed -->
+          {% include "singlePost.twing.html" with {"post":post, "seeComments":true} %}
       {% endfor %}
       </div>
-      <!-- // todo: pagination -->
     </div>
-    <script src="/js/jquery-3.5.1.slim.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/bootstrap.bundle.min.js"></script>
+  {% include "css-and-js.twing.html" %}
   </body>
 </html>

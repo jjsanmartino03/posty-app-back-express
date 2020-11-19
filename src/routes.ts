@@ -84,15 +84,24 @@ export class Router implements IRouter {
         })
       )
       .get(this.userController.loginForm);
+
+    this.appInstance
+      .route("/logout")
+      .get(this.authenticationService.userLoggedIn, this.userController.logout);
     // User routes -----------------
-    this.appInstance.route("/signup").get(this.userController.signupForm).post(passport.authenticate('local-signup', {
-      successRedirect : '/', // redirect to the secure profile section
-      failureRedirect : '/signup', // redirect back to the signup page if there is an error
-    }));
+    this.appInstance
+      .route("/signup")
+      .get(this.userController.signupForm)
+      .post(
+        passport.authenticate("local-signup", {
+          successRedirect: "/", // redirect to the secure profile section
+          failureRedirect: "/signup", // redirect back to the signup page if there is an error
+        })
+      );
 
     this.appInstance
       .route("/users")
-      .get(this.userController.index)
+      .get(this.authenticationService.userLoggedIn, this.userController.index);
 
     this.appInstance
       .route("/users/:username")
@@ -101,14 +110,19 @@ export class Router implements IRouter {
     //.delete(this.userController.destroy);
 
     // Post routes ---------------
-    this.appInstance.route("/posts").post(this.postController.create);
+    this.appInstance
+      .route("/posts")
+      .post(this.authenticationService.userLoggedIn, this.postController.create)
+      .get(this.authenticationService.userLoggedIn, this.postController.postsForm);
 
-    this.appInstance.route("/").get(this.postController.index);
+    this.appInstance
+      .route("/")
+      .get(this.authenticationService.userLoggedIn, this.postController.index);
 
     this.appInstance
       .route("/posts/:id")
-      .get(this.postController.show)
-      .put(this.postController.update);
+      .get(this.authenticationService.userLoggedIn, this.postController.show)
+      .put(this.authenticationService.userLoggedIn, this.postController.update);
 
     this.appInstance
       .route("/posts/:id/likes")

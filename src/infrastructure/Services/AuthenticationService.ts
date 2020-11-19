@@ -4,7 +4,7 @@ import { IUserRepository } from "../../domain/Repositories/IUserRepository";
 import { User } from "../../domain/Entities/User";
 import TYPES from "../../types";
 import passport, {PassportStatic} from 'passport';
-import e, {Request} from 'express';
+import e, {Request, Response} from 'express';
 
 @injectable()
 export class AuthenticationService {
@@ -69,4 +69,10 @@ export class AuthenticationService {
     appInstance.use(passport.initialize());
     appInstance.use(passport.session());
   };
+  public userLoggedIn = (request:Request, response: Response, next:Function)=>{
+    if (request.isAuthenticated()){
+      return next();
+    }
+    response.redirect("/login")
+  }
 }

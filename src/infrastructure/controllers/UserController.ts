@@ -30,6 +30,10 @@ export class UserController {
     const signupForm: string = await this.viewRenderService.signup();
     response.end(signupForm);
   }
+  public logout = async (request:Request, response: Response)=>{
+    request.logout();
+    response.redirect("/login");
+  }
   // Devolver todos los usuarios
   public index = async (
     request: Request,

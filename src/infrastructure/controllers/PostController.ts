@@ -6,7 +6,8 @@ import { Category } from "../../domain/Entities/Category";
 import { IPostRepository } from "../../domain/Repositories/IPostRepository";
 import TYPES from "../../types";
 import { PostService } from "../../application/Services/PostService";
-import {TwingViewRenderService} from '../Services/TwingViewRenderService';
+import { TwingViewRenderService } from "../Services/TwingViewRenderService";
+import {Comment} from '../../domain/Entities/Comment';
 
 @injectable()
 export class PostController {
@@ -16,28 +17,41 @@ export class PostController {
   constructor(
     @inject(TYPES.IPostRepository) postRepository: IPostRepository,
     @inject(PostService) postService: PostService,
-    @inject(TwingViewRenderService) viewRenderService: TwingViewRenderService,
+    @inject(TwingViewRenderService) viewRenderService: TwingViewRenderService
   ) {
     this.postRepository = postRepository;
     this.postService = postService;
     this.viewRenderService = viewRenderService;
+  }
+  public postsForm = async (request:Request, response:Response) => {
+    const postsForm:string = await this.viewRenderService.postForm(request.user);
+    response.end(postsForm);
   }
   public index = async (
     request: Request,
     response: Response
   ): Promise<void> => {
     // traer todos los posts con sus autores y categoras
-    const posts: Post[] = await this.postRepository.findAll(["author", "categories", "likers"]);
+    const posts: Post[] = await this.postRepository.findAll([
+      "author",
+      "categories",
+      "comments",
+      "likers",
+    ]);
 
     // Darle un formato apropiado al post, que en vez de llevar un autor completo lleva su username
     const serializedPosts = posts.map((post) => ({
       ...post,
       author: undefined,
       author_username: post.author.username,
-      categories: post.categories.map(cat => cat.name),
+      categories: post.categories.map((cat) => cat.name),
       total_likes: post.likers.length,
+      total_comments: post.comments.length,
     }));
-    const output:string = await this.viewRenderService.home(serializedPosts, request.user);
+    const output: string = await this.viewRenderService.home(
+      serializedPosts,
+      request.user
+    );
     response.end(output);
   };
 
@@ -66,26 +80,52 @@ export class PostController {
     const postId: number = Number(request.params.id);
 
     // Traer el post, junto con todas las relaciones que quiero mostrar
-    const post: Post = await this.postRepository.findOneById(postId, ["comments", "categories", "author", "likers"]);
+    const post: Post = await this.postRepository.findOneById(postId, [
+      "comments",
+      "categories",
+      "author",
+      "likers",
+    ]);
+    const serializedComments: {}[] = [];
+    for (let comment of post.comments){
+      // todo: hacer esto con repository
+      const trackedComment: Comment = await Comment.findOneOrFail(comment.id, {relations:["likers","author"]});
+      serializedComments.push({
+        ...trackedComment,
+        total_likes: trackedComment.likers.length,
+        likers: undefined,
+        author_username:trackedComment.author.username,
+        author: undefined,
+      })
+    }
     // Darle propiedades adecuadas a lo que quiero dar en la response
     const serializedPost = {
       ...post,
       id: post.id,
       author_username: post.author.username,
-      comments: post.comments,
+      comments: serializedComments,
+      total_comments: post.comments.length,
       categories: post.categories.map((cat) => cat.name),
       total_likes: post.likers.length,
       created_at: post.created_at,
     };
-
-    response.json(serializedPost);
+    const output: string = await this.viewRenderService.postView(
+      serializedPost,
+      request.user
+    );
+    response.end(output);
   };
 
   public update = async (request: Request, response: Response) => {
     const payload = request.body;
     const postId: number = Number(request.params.id);
 
-    const post = await this.postService.update(postId, payload.title, payload.content, payload.categories);
+    const post = await this.postService.update(
+      postId,
+      payload.title,
+      payload.content,
+      payload.categories
+    );
     response.send({ message: "Updated", post }).status(201);
   };
 
@@ -93,7 +133,7 @@ export class PostController {
     const postId: number = Number(request.params.id);
     const giverId: number = request.body.giver_id;
 
-    await this.postRepository.addLikeToPost(postId,giverId);
+    await this.postRepository.addLikeToPost(postId, giverId);
 
     response.send({ message: "Like added!" }).status(201);
   };
@@ -102,7 +142,7 @@ export class PostController {
     const postId: number = Number(request.params.id);
     const giverId: number = request.body.giver_id;
 
-    await this.postRepository.removeLikeToPost(postId,giverId);
+    await this.postRepository.removeLikeToPost(postId, giverId);
 
     response.send({ message: "Like added!" }).status(201);
   };
