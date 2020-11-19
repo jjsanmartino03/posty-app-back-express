@@ -1,5 +1,4 @@
 import express from "express";
-import { ExampleController } from "./infrastructure/controllers/ExampleController";
 import bodyParser from "body-parser";
 import { App } from "./app";
 import { inject, injectable } from "inversify";
@@ -23,7 +22,6 @@ export class Router implements IRouter {
   private DBconnection: Connection;
   private authenticationService: AuthenticationService;
   // Todos los controller son dependencias del router, que se inyectan en el constructor
-  private exampleController: ExampleController;
   private categoryController: CategoryController;
   private userController: UserController;
   private postController: PostController;
@@ -32,7 +30,6 @@ export class Router implements IRouter {
 
   // Traer todas las dependencies a través de inversify
   constructor(
-    @inject(ExampleController) exampleController: ExampleController,
     @inject(CategoryController) categoryController: CategoryController,
     @inject(UserController) userController: UserController,
     @inject(PostController) postController: PostController,
@@ -41,7 +38,6 @@ export class Router implements IRouter {
     @inject(TYPES.IUserRepository) userRepository: IUserRepository
   ) {
     this.categoryController = categoryController;
-    this.exampleController = exampleController;
     this.userController = userController;
     this.postController = postController;
     this.commentController = commentController;
@@ -144,11 +140,6 @@ export class Router implements IRouter {
       .route("/categories")
       .get(this.authenticationService.userLoggedIn, this.categoryController.categoryForm)
       .post(this.authenticationService.userLoggedIn, this.categoryController.create);
-
-    this.appInstance
-      .route("/examples")
-      .get(this.exampleController.getAll.bind(this.exampleController))
-      .post(this.exampleController.create.bind(this.exampleController));
   }
   private async initializeDBConnection() {
     // No le paso parámetros porque detecta automáticamente la configuración del archivo ormconfig.json

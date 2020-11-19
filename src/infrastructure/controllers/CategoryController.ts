@@ -34,6 +34,6 @@ export class CategoryController {
     const payload = request.body;
     const category: Category = await this.categoryService.create(payload.name, payload.parent_category);
 
-    response.send({ message: "Category Created!", category }).status(201);
+    response.redirect("/")
   };
 }

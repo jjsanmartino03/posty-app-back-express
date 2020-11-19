@@ -29,4 +29,7 @@ export class TwingViewRenderService {
   public async userIndex(user:any, users:any):Promise<string>{
     return await twing.render("userIndex.twing.html", {user, users});
   }
+  public async userProfile(currentUser:any, requestedUser:any):Promise<string>{
+    return await twing.render("userProfile.twing.html", {user:currentUser, requestedUser});
+  }
 }

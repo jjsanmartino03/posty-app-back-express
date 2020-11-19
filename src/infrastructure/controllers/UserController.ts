@@ -75,10 +75,24 @@ export class UserController {
     const username: string = request.params.username;
     // obtener el usuario de la base de datos
     const user: User = await this.userRepository.findByUsername(username, [
-      "posts",
+      "posts","posts.likers","posts.comments", "posts.categories"
     ]);
+    const serializedUser = {
+      ...user,
+      total_posts:user.posts.length,
+      posts : user.posts.map(post => ({
+        ...post,
+        categories: post.categories.map(cat=>cat.name),
+        total_likes: post.likers.length,
+        author_username:user.username,
+        likers:undefined,
+        total_comments: post.comments.length,
+        comments:undefined,
+      }))
+    }
 
-    response.json(user);
+    const userProfile:string = await this.viewRenderService.userProfile(request.user, serializedUser);
+    response.end(userProfile);
   };
   // modificar usuario existente
   public update = async (request: Request, response: Response) => {
