@@ -1,5 +1,5 @@
 <nav
-  class="navbar navbar-expand-md navbar-light sticky-top d-flex justify-content-md-around bg-light"
+  class="navbar shadow navbar-expand-md navbar-light sticky-top d-flex justify-content-md-around bg-light"
 >
   <a class="navbar-brand d-flex align-items-center" href="/"><img width="25" class="mr-1" src="/pen-icon.svg"/>Posty App</a>
   <button
@@ -39,7 +39,7 @@
                 @{{user.username}}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="/users/{{user.username}}">Profile</a>
+                <a class="dropdown-item" href="/users/{{user.username}}">My Profile</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/logout">Log out</a>
             </div>

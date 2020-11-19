@@ -15,13 +15,13 @@
     <title>Log In</title>
 </head>
 <body>
-{% include "navbar.twing.html" with {"loginActive":"active"} %}
+{% include "navbar.twing.html" %}
 <div
         class="container-md d-flex pb-4 mt-5 align-items-center justify-content-center h-100 flex-column"
 >
     <h1 class="text-center mt-4">Sign up to Posty App</h1>
     <div class="container d-flex flex-column main mt-3">
-        <form action="http://localhost:3333/signup" method="POST">
+        <form action="/signup" method="POST">
 
             <div class="form-group">
                 <label for="usernameInput">Username</label>
