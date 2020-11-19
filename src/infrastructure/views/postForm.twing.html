@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link rel="icon" href="/pen-icon.svg"/>
+
+    <title>Create Post</title>
+</head>
+<body>
+{% include "navbar.twing.html" with {"createPostActive":"active"} %}
+<div
+        class="container-md d-flex pb-4 mt-5 align-items-center justify-content-center h-100 flex-column"
+>
+    <h1 class="text-center mt-4">Create a post, <span class="text-primary">{{user.username}}</span></h1>
+    <div class="container d-flex flex-column main mt-3">
+        <form action="/posts" method="POST">
+
+            <div class="form-group">
+                <label for="titleInput">Title</label>
+
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="titleInput"
+                            name="title"
+                            autofocus
+                            placeholder="Write the title..."
+                    />
+            </div>
+            <div class="form-group">
+                <label for="contentInput">Content</label>
+
+                <input
+                        type="text"
+                        class="form-control"
+                        id="contentInput"
+                        name="content"
+                        placeholder="Write the content..."
+                />
+            </div>
+            <div class="form-group">
+                <label for="selectCategories">Select the categories: (to select more than one, hold ctrl while clicking the categories)</label>
+                <select class="form-control" id="selectCategories" multiple name="categories">
+                    {% for category in categories %}
+                    <option value="{{category.id}}">{{category.name}}</option>
+                    {% endfor  %}
+                </select>
+            </div>
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary px-5">Create the post</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% include "css-and-js.twing.html" %}
+</body>
+</html>

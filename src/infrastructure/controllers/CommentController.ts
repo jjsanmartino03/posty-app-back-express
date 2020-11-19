@@ -38,17 +38,10 @@ export class CommentController {
     const payload = request.body;
     const postId: number = Number(request.params.post_id);
 
-    const comment: Comment = await this.commentService.create(postId, payload.author_id, payload.content);
+    // @ts-ignore
+    const comment: Comment = await this.commentService.create(postId, request.user.id, payload.content);
 
-    const serializedComment = {
-      ...comment,
-      author_username: comment.author.username,
-      author: undefined,
-    };
-
-    response
-      .send({ message: "Comment Created!", comment: serializedComment })
-      .status(201);
+    response.redirect(`/posts/${postId}`);
   };
 
   public addLike = async (request: Request, response: Response) => {

@@ -5,8 +5,8 @@ import {getConnection} from 'typeorm';
 
 @injectable()
 export class TypeORMPostRepository implements IPostRepository {
-  public async findAll(relations: string[] = []): Promise<Post[]> {
-    return await Post.find({ relations: relations });
+  public async findAll(relations: string[] = [], order: {} = {id:"ASC"}): Promise<Post[]> {
+    return await Post.find({ relations: relations, order:order });
   }
   public async findOneById(
     id: number,

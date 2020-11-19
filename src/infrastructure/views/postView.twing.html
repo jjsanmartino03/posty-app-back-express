@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- todo: include head template -->
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link rel="icon" href="/pen-icon.svg" />
+
+    <title>{{post.title}}</title>
+  </head>
+  <body>
+    <!-- todo: add likes possibility for posts
+todo: add link to single post -->
+    {% include "navbar.twing.html" with {"homeActive":"active", "user":user} %}
+    <div
+      class="container-md d-flex pb-4 mt-5 align-items-center justify-content-center h-100 flex-column"
+    >
+      <div
+        class="container-md d-flex flex-column align-items-center main-content mt-3"
+      >
+        <!-- todo: make post a single view to embed -->
+        {% include "singlePost.twing.html" with {"post":post, "seeComments":false} %}
+        <div class="container comments">
+          <div
+            class="d-flex flex-md-row flex-column flex-row align-items-md-end justify-content-md-between w-100 align-items-center my-2"
+          >
+            <h2>Comments</h2>
+            <h4><a href="#contentInput">Add a comment</a></h4>
+          </div>
+
+          {% for comment in post.comments %}
+          <div class="card mb-3">
+            <div class="card-header">
+              <a class="text-danger" href="/users/{{comment.author_username}}"
+                >@{{comment.author_username}}</a
+              >
+            </div>
+            <div class="card-body">{{comment.content}}</div>
+            <div class="card-footer">{{comment.total_likes}} likes</div>
+          </div>
+          {% endfor %}
+          <form
+            class=""
+            id="comment-form"
+            method="post"
+            action="/posts/{{post.id}}/comments"
+          >
+            <div class="form-group">
+              <input
+                type="text"
+                class="form-control"
+                id="contentInput"
+                placeholder="Write your comment..."
+                name="content"
+                required
+                aria-required="true"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">
+              Add your comment
+            </button>
+          </form>
+        </div>
+      </div>
+      <!-- // todo: pagination -->
+    </div>
+    {% include "css-and-js.twing.html" %}
+  </body>
+</html>

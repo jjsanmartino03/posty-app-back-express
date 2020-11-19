@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link rel="icon" href="/pen-icon.svg"/>
+
+    <title>Feed</title>
+  </head>
+  <body>
+  <!-- todo: add likes possibility for posts
+  todo: add link to single post -->
+    {% include "navbar.twing.html" with {"homeActive":"active", "user":user} %}
+    <div
+      class="container-md d-flex pb-4 mt-5 align-items-center justify-content-center h-100 flex-column"
+    >
+      <header class="d-flex flex-md-row flex-column flex-row align-items-md-end justify-content-md-between w-100 align-items-center mb-4">
+        <h1 class="text-center">Feed</h1>
+        <h3><a href="/posts">Create a post</a></h3>
+      </header>
+      <div
+              class="container-md d-flex flex-column align-items-center main-content mt-3"
+      >
+      {% for post in posts %}
+        <!-- todo: make post a single view to embed -->
+          {% include "singlePost.twing.html" with {"post":post, "seeComments":true} %}
+      {% endfor %}
+      </div>
+    </div>
+  {% include "css-and-js.twing.html" %}
+  </body>
+</html>

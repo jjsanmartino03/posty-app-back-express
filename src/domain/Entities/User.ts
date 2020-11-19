@@ -17,10 +17,10 @@ export class User extends AbstractCommonEntity {
     @Column({unique:true})
     public username:string;
 
-    @Column()
+    @Column({unique:true})
     public email:string;
 
-    @Column({select:false})
+    @Column()
     public password:string;
 
     @OneToMany(()=> Post, post=> post.author, {cascade:true})

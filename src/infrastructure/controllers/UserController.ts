@@ -5,26 +5,50 @@ import { Connection, getConnection } from "typeorm";
 import { UserService } from "../../application/Services/UserService";
 import TYPES from "../../types";
 import { IUserRepository } from "../../domain/Repositories/IUserRepository";
+import {TwingViewRenderService} from '../Services/TwingViewRenderService';
+import {log} from 'util';
 
 @injectable()
 export class UserController {
   private userService: UserService;
   private userRepository: IUserRepository;
+  private viewRenderService: TwingViewRenderService;
   constructor(
     @inject(TYPES.IUserRepository) userRepository: IUserRepository,
-    @inject(UserService) userService: UserService
+    @inject(UserService) userService: UserService,
+    @inject(TwingViewRenderService) viewRenderService: TwingViewRenderService,
   ) {
     this.userRepository = userRepository;
     this.userService = userService;
+    this.viewRenderService = viewRenderService;
+  }
+  public loginForm = async (request:Request, response:Response) => {
+    const loginForm: string = await this.viewRenderService.login();
+    response.end(loginForm);
+  }
+  public signupForm = async (request:Request, response: Response) => {
+    const signupForm: string = await this.viewRenderService.signup();
+    response.end(signupForm);
+  }
+  public logout = async (request:Request, response: Response)=>{
+    request.logout();
+    response.redirect("/login");
   }
   // Devolver todos los usuarios
   public index = async (
     request: Request,
     response: Response
   ): Promise<void> => {
-    const users: User[] = await this.userRepository.findAll();
+    const users: User[] = await this.userRepository.findAll(["posts"]);
 
-    response.json(users);
+    const serializedUsers = users.map(user=>({
+      ...user,
+      posts: undefined,
+      total_posts: user.posts.length,
+    }));
+
+    const userIndex: string = await this.viewRenderService.userIndex(request.user, serializedUsers);
+    response.end(userIndex);
   };
   // crear un usuario
   public create = async (request: Request, response: Response) => {
@@ -44,19 +68,31 @@ export class UserController {
     };
 
     // Usuario creado con éxito
-    response
-      .send({ message: "User created", user: serializedUser })
-      .status(201);
+    response.redirect("/login", )
   };
   // traer usuario con el username
   public getUserByUsername = async (request: Request, response: Response) => {
     const username: string = request.params.username;
     // obtener el usuario de la base de datos
     const user: User = await this.userRepository.findByUsername(username, [
-      "posts",
+      "posts","posts.likers","posts.comments", "posts.categories"
     ]);
+    const serializedUser = {
+      ...user,
+      total_posts:user.posts.length,
+      posts : user.posts.map(post => ({
+        ...post,
+        categories: post.categories.map(cat=>cat.name),
+        total_likes: post.likers.length,
+        author_username:user.username,
+        likers:undefined,
+        total_comments: post.comments.length,
+        comments:undefined,
+      }))
+    }
 
-    response.json(user);
+    const userProfile:string = await this.viewRenderService.userProfile(request.user, serializedUser);
+    response.end(userProfile);
   };
   // modificar usuario existente
   public update = async (request: Request, response: Response) => {

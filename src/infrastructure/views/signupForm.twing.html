@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link rel="icon" href="/pen-icon.svg"/>
+
+    <title>Sign Up</title>
+</head>
+<body>
+{% include "navbar.twing.html" %}
+<div
+        class="container-md d-flex pb-4 mt-5 align-items-center justify-content-center h-100 flex-column"
+>
+    <h1 class="text-center mt-4">Sign up to Posty App</h1>
+    <div class="container d-flex flex-column main mt-3">
+        <form action="/signup" method="POST">
+
+            <div class="form-group">
+                <label for="usernameInput">Username</label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">@</span>
+                    </div>
+
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="usernameInput"
+                            name="username"
+                            placeholder="Write your username..."
+                            autofocus
+                    />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="emailInput">Email</label>
+                <input
+                        type="email"
+                        class="form-control"
+                        id="emailInput"
+                        name="email"
+                        placeholder="Only the email is left..."
+                />
+            </div>
+            <div class="form-group">
+                <label for="passwordInput">Password</label>
+                <input
+                        type="password"
+                        class="form-control"
+                        id="passwordInput"
+                        name="password"
+                        placeholder="Type your password"
+                />
+            </div>
+
+
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary px-5">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% include "css-and-js.twing.html" %}
+</body>
+</html>

@@ -1,0 +1,45 @@
+<div
+        class="card mb-3 w-100 border-success text-white bg-dark"
+        style="width: 18rem"
+>
+    {% if seeComments %}
+    <h6 class="card-header d-flex justify-content-between">
+        <a class="text-danger" href="/users/{{post.author_username}}"
+        >@{{post.author_username}}</a
+        >
+        <a href="/posts/{{post.id}}">See post with comments</a>
+    </h6>
+    {% else %}
+    <h6 class="card-header d-flex justify-content-between">
+        <a class="text-danger" href="/users/{{post.author_username}}"
+        >@{{post.author_username}}</a
+        >
+    </h6>
+    {% endif %}
+
+    <div class="card-body">
+        <h5 class="card-title text-center">{{post.title}}</h5>
+        <p class="card-text">{{post.content}}</p>
+    </div>
+    <div class="card-footer d-flex align-items-center justify-content-between">
+        <div class="comment-likes d-flex">
+            <h6 href="#" class="card-link">{{post.total_likes}} likes</h6>
+            <h6 href="#" class="card-link">
+                {{post.total_comments}} comments
+            </h6>
+        </div>
+        {% if post.categories != false %}
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle text-warning" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Categories
+            </button>
+
+            <div class="dropdown-menu bg-secondary" aria-labelledby="dropdownMenuButton">
+                {% for category in post.categories %}
+                <h6  class="ml-3 text-warning">{{category}}</h6>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>

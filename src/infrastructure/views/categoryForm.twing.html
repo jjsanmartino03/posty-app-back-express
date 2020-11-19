@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link rel="icon" href="/pen-icon.svg" />
+
+    <title>Create Category</title>
+  </head>
+  <body>
+    {% include "navbar.twing.html" with {"user":user, "categoryActive":"active"} %}
+    <div
+      class="container-md d-flex pb-4 mt-5 align-items-center justify-content-center h-100 flex-column"
+    >
+      <h1 class="text-center mt-4">Create a category, <span class="text-primary">{{user.username}}</span></h1>
+      <div class="container d-flex flex-column main mt-3">
+        <form action="/categories" method="POST">
+          <div class="form-group">
+            <label for="nameInput">Name</label>
+
+            <input
+              type="text"
+              class="form-control"
+              id="nameInput"
+              name="name"
+              autofocus
+              placeholder="Write the category name..."
+            />
+          </div>
+          <div class="form-group">
+            <label for="selectCategory"
+              >Select the parent category, if any</label
+            >
+            <select
+              class="form-control"
+              id="selectCategory"
+              name="parent_category"
+            >
+              <option value="" selected>No parent category</option>
+              {% for category in categories %}
+              <option value="{{category.id}}">{{category.name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary px-5">
+              Submit the category
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    {% include "css-and-js.twing.html" %}
+  </body>
+</html>
