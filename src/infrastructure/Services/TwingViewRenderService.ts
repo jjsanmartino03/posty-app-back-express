@@ -8,8 +8,8 @@ let twing = new TwingEnvironment(loader);
 
 @injectable()
 export class TwingViewRenderService {
-  public async home(posts: any): Promise<string> {
-    return await twing.render("home.twing.html", { posts });
+  public async home(posts: any, user: any): Promise<string> {
+    return await twing.render("postsIndex.twing.html", { posts, user });
   }
   public async login(): Promise<string> {
     return await twing.render("loginForm.twing.html");

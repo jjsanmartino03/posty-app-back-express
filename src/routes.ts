@@ -80,7 +80,7 @@ export class Router implements IRouter {
       .post(
         passport.authenticate("local", {
           failureRedirect: "/login",
-          successRedirect: "/posts",
+          successRedirect: "/",
         })
       )
       .get(this.userController.loginForm);
@@ -98,10 +98,9 @@ export class Router implements IRouter {
     //.delete(this.userController.destroy);
 
     // Post routes ---------------
-    this.appInstance
-      .route("/posts")
-      .get(this.postController.index)
-      .post(this.postController.create);
+    this.appInstance.route("/posts").post(this.postController.create);
+
+    this.appInstance.route("/").get(this.postController.index);
 
     this.appInstance
       .route("/posts/:id")

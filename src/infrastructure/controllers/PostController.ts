@@ -27,7 +27,7 @@ export class PostController {
     response: Response
   ): Promise<void> => {
     // traer todos los posts con sus autores y categoras
-    const posts: Post[] = await this.postRepository.findAll(["author", "categories"]);
+    const posts: Post[] = await this.postRepository.findAll(["author", "categories", "likers"]);
 
     // Darle un formato apropiado al post, que en vez de llevar un autor completo lleva su username
     const serializedPosts = posts.map((post) => ({
@@ -35,8 +35,9 @@ export class PostController {
       author: undefined,
       author_username: post.author.username,
       categories: post.categories.map(cat => cat.name),
+      total_likes: post.likers.length,
     }));
-    const output:string = await this.viewRenderService.home(posts);
+    const output:string = await this.viewRenderService.home(serializedPosts, request.user);
     response.end(output);
   };
 

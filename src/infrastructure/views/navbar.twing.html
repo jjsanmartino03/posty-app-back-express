@@ -1,0 +1,49 @@
+<nav
+  class="navbar navbar-expand-md navbar-light sticky-top d-flex justify-content-md-around bg-light"
+>
+  <a class="navbar-brand d-flex align-items-center" href="http://localhost:3333"><img width="25" class="mr-1" src="/pen-icon.svg"/>Posty App</a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse flex-grow-0" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item {{ homeActive }}">
+        <a class="nav-link" href="http://localhost:3333"
+          >Home <span class="sr-only"></span
+        ></a>
+      </li>
+      <li class="nav-item {{ loginActive }}">
+        <a class="nav-link" href="http://localhost:3333/login"
+          >Login <span class="sr-only"></span
+        ></a>
+      </li>
+      <li class="nav-item {{usersActive}}">
+        <a class="nav-link" href="http://localhost:3333/users">Users</a>
+      </li>
+      <li class="nav-item {{postsActive}}">
+        <a class="nav-link" href="http://localhost:3333/users">Create post</a>
+      </li>
+        {% if user %}
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-primary"  id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                @{{user.username}}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="/users/{{user.username}}">Profile</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/logout">Log out</a>
+            </div>
+        </li>
+        {% endif %}
+    </ul>
+  </div>
+</nav>

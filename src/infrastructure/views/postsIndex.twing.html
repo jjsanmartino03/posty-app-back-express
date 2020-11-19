@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="icon" href="/pen-icon.svg"/>
+
+    <title>Log In</title>
+  </head>
+  <body>
+  <!-- todo: add likes possibility for posts
+  todo: add link to single post -->
+    {% include "navbar.twing.html" with {"homeActive":"active", "user":user} %}
+    <div
+      class="container-md d-flex pb-4 mt-5 align-items-center justify-content-center h-100 flex-column"
+    >
+      <header class="d-flex flex-md-row flex-column flex-row align-items-md-end justify-content-md-between w-100 align-items-center mb-4">
+        <h1 class="text-center">Posts Index</h1>
+        <h3><a href="http://localhost:3333/login">Create a post</a></h3>
+      </header>
+      {% for post in posts %}
+      <div
+        class="container-md d-flex flex-column align-items-center main-content mt-3"
+      >
+        <div class="card w-100 border-success text-white bg-dark" style="width: 18rem">
+          <h6 class="card-header">
+            <a class="text-danger" href="/users/{{post.author_username}}"
+              >@{{post.author_username}}</a
+            >
+          </h6>
+          <div class="card-body">
+            <h5 class="card-title">{{post.title}}</h5>
+            <p class="card-text">{{post.content}}</p>
+            <a href="#" class="card-link">Another link</a>
+          </div>
+          <div class="card-footer pb-0">
+            <h6 href="#" class="card-link">{{post.total_likes}} likes</h6>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      <!-- // todo: pagination -->
+    </div>
+    <script src="/js/jquery-3.5.1.slim.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
