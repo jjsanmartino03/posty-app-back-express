@@ -15,4 +15,7 @@ export class TypeORMCategoryRepository implements ICategoryRepository{
     public async save(category:Category):Promise<void>{
         await category.save();
     }
+    public async getAll():Promise<Category[]>{
+        return await Category.find();
+    }
 }

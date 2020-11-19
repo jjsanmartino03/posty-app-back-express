@@ -7,26 +7,36 @@ import { IPostRepository } from "../../domain/Repositories/IPostRepository";
 import TYPES from "../../types";
 import { PostService } from "../../application/Services/PostService";
 import { TwingViewRenderService } from "../Services/TwingViewRenderService";
-import {Comment} from '../../domain/Entities/Comment';
+import { Comment } from "../../domain/Entities/Comment";
+import { ICategoryRepository } from "../../domain/Repositories/ICategoryRepository";
 
+// todo: Tendría que haber usado bien las opciones de las relations con TypeORM. de las subrelaciones, como
+//  "comments", "comments.likers"
 @injectable()
 export class PostController {
   private postRepository: IPostRepository;
   private postService: PostService;
   private viewRenderService: TwingViewRenderService;
+  private categoryRepository: ICategoryRepository;
   constructor(
     @inject(TYPES.IPostRepository) postRepository: IPostRepository,
+    @inject(TYPES.ICategoryRepository) categoryRepository: ICategoryRepository,
     @inject(PostService) postService: PostService,
     @inject(TwingViewRenderService) viewRenderService: TwingViewRenderService
   ) {
     this.postRepository = postRepository;
     this.postService = postService;
     this.viewRenderService = viewRenderService;
+    this.categoryRepository = categoryRepository;
   }
-  public postsForm = async (request:Request, response:Response) => {
-    const postsForm:string = await this.viewRenderService.postForm(request.user);
+  public postsForm = async (request: Request, response: Response) => {
+    const existingCategories = await this.categoryRepository.getAll();
+    const postsForm: string = await this.viewRenderService.postForm(
+      request.user,
+      existingCategories
+    );
     response.end(postsForm);
-  }
+  };
   public index = async (
     request: Request,
     response: Response
@@ -37,7 +47,7 @@ export class PostController {
       "categories",
       "comments",
       "likers",
-    ]);
+    ], {id:"DESC"});
 
     // Darle un formato apropiado al post, que en vez de llevar un autor completo lleva su username
     const serializedPosts = posts.map((post) => ({
@@ -57,13 +67,16 @@ export class PostController {
 
   public create = async (request: Request, response: Response) => {
     const payload = request.body;
+    const categories: number[] = payload.categories.map((catId:string) => parseInt(catId));
 
     const post: Post = await this.postService.create(
       payload.title,
-      payload.author_id,
+      //@ts-ignore
+      request.user.id,
       payload.content,
-      payload.categories
+      categories,
     );
+    response.redirect("/");
     // adaptar el post a lo que quiero devolver en la response
     const serializedPost = {
       ...post,
@@ -87,16 +100,18 @@ export class PostController {
       "likers",
     ]);
     const serializedComments: {}[] = [];
-    for (let comment of post.comments){
+    for (let comment of post.comments) {
       // todo: hacer esto con repository
-      const trackedComment: Comment = await Comment.findOneOrFail(comment.id, {relations:["likers","author"]});
+      const trackedComment: Comment = await Comment.findOneOrFail(comment.id, {
+        relations: ["likers", "author"],
+      });
       serializedComments.push({
         ...trackedComment,
         total_likes: trackedComment.likers.length,
         likers: undefined,
-        author_username:trackedComment.author.username,
+        author_username: trackedComment.author.username,
         author: undefined,
-      })
+      });
     }
     // Darle propiedades adecuadas a lo que quiero dar en la response
     const serializedPost = {

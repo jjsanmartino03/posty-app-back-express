@@ -10,7 +10,7 @@ export abstract class AbstractLikeableContentEntity extends AbstractCommonEntity
   @JoinTable()
   public likers: User[];
 
-  @Column()
+  @Column({type:"text"})
   public content: string;
 
   // El contenido siempre tiene un autor, un creador
