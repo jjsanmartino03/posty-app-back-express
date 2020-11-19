@@ -22,6 +22,7 @@ import {TypeORMCategoryRepository} from './infrastructure/Persistence/TypeORMCat
 import {ICategoryRepository} from './domain/Repositories/ICategoryRepository';
 import {CategoryService} from './application/Services/CategoryService';
 import {AuthenticationService} from './infrastructure/Services/AuthenticationService';
+import {TwingViewRenderService} from './infrastructure/Services/TwingViewRenderService';
 
 const DIContainer = new Container();
 
@@ -34,6 +35,8 @@ DIContainer.bind<CommentService>(CommentService).toSelf();
 DIContainer.bind<CategoryService>(CategoryService).toSelf();
 
 DIContainer.bind<AuthenticationService>(AuthenticationService).toSelf();
+// todo: crear una interfaz para ViewRenderService
+DIContainer.bind<TwingViewRenderService>(TwingViewRenderService).toSelf();
 
 // Repositories
 DIContainer.bind<ExampleRepository>(TYPES.ExampleRepository).to(TypeORMExampleRepository);

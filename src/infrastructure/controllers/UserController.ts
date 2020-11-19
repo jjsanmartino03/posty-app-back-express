@@ -5,17 +5,26 @@ import { Connection, getConnection } from "typeorm";
 import { UserService } from "../../application/Services/UserService";
 import TYPES from "../../types";
 import { IUserRepository } from "../../domain/Repositories/IUserRepository";
+import {TwingViewRenderService} from '../Services/TwingViewRenderService';
+import {log} from 'util';
 
 @injectable()
 export class UserController {
   private userService: UserService;
   private userRepository: IUserRepository;
+  private viewRenderService: TwingViewRenderService;
   constructor(
     @inject(TYPES.IUserRepository) userRepository: IUserRepository,
-    @inject(UserService) userService: UserService
+    @inject(UserService) userService: UserService,
+    @inject(TwingViewRenderService) viewRenderService: TwingViewRenderService,
   ) {
     this.userRepository = userRepository;
     this.userService = userService;
+    this.viewRenderService = viewRenderService;
+  }
+  public loginForm = async (request:Request, response:Response) => {
+    const loginForm: string = await this.viewRenderService.login();
+    response.end(loginForm);
   }
   // Devolver todos los usuarios
   public index = async (

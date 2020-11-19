@@ -6,34 +6,38 @@ import { Category } from "../../domain/Entities/Category";
 import { IPostRepository } from "../../domain/Repositories/IPostRepository";
 import TYPES from "../../types";
 import { PostService } from "../../application/Services/PostService";
+import {TwingViewRenderService} from '../Services/TwingViewRenderService';
 
 @injectable()
 export class PostController {
   private postRepository: IPostRepository;
   private postService: PostService;
+  private viewRenderService: TwingViewRenderService;
   constructor(
     @inject(TYPES.IPostRepository) postRepository: IPostRepository,
-    @inject(PostService) postService: PostService
+    @inject(PostService) postService: PostService,
+    @inject(TwingViewRenderService) viewRenderService: TwingViewRenderService,
   ) {
     this.postRepository = postRepository;
     this.postService = postService;
+    this.viewRenderService = viewRenderService;
   }
   public index = async (
     request: Request,
     response: Response
   ): Promise<void> => {
-    // todo: traer posts con categorías, quizás
-    // traer todos los posts con sus autores
-    const posts: Post[] = await this.postRepository.findAll(["author"]);
+    // traer todos los posts con sus autores y categoras
+    const posts: Post[] = await this.postRepository.findAll(["author", "categories"]);
 
     // Darle un formato apropiado al post, que en vez de llevar un autor completo lleva su username
     const serializedPosts = posts.map((post) => ({
       ...post,
       author: undefined,
       author_username: post.author.username,
+      categories: post.categories.map(cat => cat.name),
     }));
-
-    response.json(serializedPosts);
+    const output:string = await this.viewRenderService.home(posts);
+    response.end(output);
   };
 
   public create = async (request: Request, response: Response) => {

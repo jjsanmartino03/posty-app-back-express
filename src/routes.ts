@@ -12,10 +12,10 @@ import { CommentController } from "./infrastructure/controllers/CommentControlle
 import { AuthenticationService } from "./infrastructure/Services/AuthenticationService";
 import passport from "passport";
 import session from "express-session";
-import {User} from './domain/Entities/User';
-import {Strategy} from 'passport-local';
-import {IUserRepository} from './domain/Repositories/IUserRepository';
-import TYPES from './types';
+import { User } from "./domain/Entities/User";
+import { Strategy } from "passport-local";
+import { IUserRepository } from "./domain/Repositories/IUserRepository";
+import TYPES from "./types";
 
 @injectable()
 export class Router implements IRouter {
@@ -38,7 +38,7 @@ export class Router implements IRouter {
     @inject(PostController) postController: PostController,
     @inject(CommentController) commentController: CommentController,
     @inject(AuthenticationService) authenticationService: AuthenticationService,
-    @inject(TYPES.IUserRepository)userRepository: IUserRepository,
+    @inject(TYPES.IUserRepository) userRepository: IUserRepository
   ) {
     this.categoryController = categoryController;
     this.exampleController = exampleController;
@@ -62,30 +62,28 @@ export class Router implements IRouter {
   private async initializeMiddlewares() {
     this.appInstance.use(bodyParser.urlencoded({ extended: true }));
     this.appInstance.use(bodyParser.json());
+    this.appInstance.use(express.static("public"));
     this.appInstance.use(
       session({
-        secret: process.env.SESSION_SECRET|| "keyboard cat",
+        secret: process.env.SESSION_SECRET || "keyboard cat",
         resave: false,
         saveUninitialized: false,
       })
     );
     this.authenticationService.setup(this.appInstance);
-
-
-
   }
 
   private intializeRoutes() {
     // authentication ---------------
-    this.appInstance.post(
-      "/login",
-      passport.authenticate("local", {
-        successRedirect:"/posts",
-      }),
-        function (req,res){
-        res.json({hola:"que tal"});
-        }
-    );
+    this.appInstance
+      .route("/login")
+      .post(
+        passport.authenticate("local", {
+          failureRedirect: "/login",
+          successRedirect: "/posts",
+        })
+      )
+      .get(this.userController.loginForm);
     // User routes -----------------
 
     this.appInstance
