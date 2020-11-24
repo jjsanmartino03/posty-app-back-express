@@ -10,9 +10,16 @@ import {
 import {Post} from './Post';
 import {Comment} from './Comment';
 import {AbstractCommonEntity} from './AbstractCommonEntity';
+import {compareSync, genSaltSync, hashSync} from 'bcrypt';
 
 @Entity()
 export class User extends AbstractCommonEntity {
+    public generateHash = (password:string):string => {
+        return hashSync(password, genSaltSync(8));
+    }
+    public checkPassword = (password:string):boolean => {
+        return compareSync(password, this.password);
+    }
     // Columna UNIQUE
     @Column({unique:true})
     public username:string;

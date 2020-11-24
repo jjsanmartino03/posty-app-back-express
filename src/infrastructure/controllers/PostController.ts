@@ -67,7 +67,7 @@ export class PostController {
 
   public create = async (request: Request, response: Response) => {
     const payload = request.body;
-    const categories: number[] = payload.categories.map((catId:string) => parseInt(catId));
+    const categories: number[] = payload.categories ? payload.categories.map((catId:string) => parseInt(catId)): [];
 
     const post: Post = await this.postService.create(
       payload.title,

@@ -23,7 +23,7 @@ export class AuthenticationService {
       const user: User = new User();
       user.username = username;
       user.email = request.body.email;
-      user.password = password;
+      user.password = user.generateHash(password);
 
       await this.userRepository.save(user);
 
@@ -42,7 +42,7 @@ export class AuthenticationService {
       if (!user) {
         return done(null, false);
       }
-      if (user.password !== password) {
+      if (!user.checkPassword(password)) {
         return done(null, false);
       }
       return done(null, user);
