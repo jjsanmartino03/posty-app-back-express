@@ -2,4 +2,7 @@
 .ormconfig.json
 node_modules/
 .env
+docker/mysql-config/
+docker/mysql-data/
+
 

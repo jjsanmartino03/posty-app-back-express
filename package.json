@@ -9,8 +9,8 @@
     "dev": "ts-node-dev ./src/server.ts --respawn --transpileOnly",
     "prod": "tsc && node ./build/server.js"
   },
-  "author": "Ivan Lencina",
-  "license": "ISC",
+  "author": "Julián Sanmartino",
+  "license": "MIT",
   "dependencies": {
     "bootstrap": "^4.5.3",
     "dotenv": "^8.2.0",

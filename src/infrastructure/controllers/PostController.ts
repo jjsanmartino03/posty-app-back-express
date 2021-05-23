@@ -65,9 +65,17 @@ export class PostController {
     response.end(output);
   };
 
-  public create = async (request: Request, response: Response) => {
+  public create = async (request: any, response: Response) => {
     const payload = request.body;
-    const categories: number[] = payload.categories.map((catId:string) => parseInt(catId));
+
+    let categories: number[];
+
+    if (typeof payload.categories === 'object') {
+      categories = payload.categories.map((catId:string) => parseInt(catId));
+    }else{
+      categories = payload.categories ? [payload.categories] : [];
+    }
+
 
     const post: Post = await this.postService.create(
       payload.title,

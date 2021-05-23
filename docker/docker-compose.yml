@@ -1,0 +1,34 @@
+version: '3.7'
+services:
+  mysql:
+    image: mysql:latest
+    cap_add:
+      - SYS_NICE
+    hostname: mysql
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - ./mysql-config:/etc/mysql/conf.d
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: posty
+      USER: 1000
+    command: --default-authentication-plugin=mysql_native_password --port=3306
+
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+
+  back:
+    image: node:14.17
+    hostname: back
+    links:
+      - mysql
+    ports:
+      - '3333:3333'
+    volumes:
+      - ../:/usr/src/service
+    working_dir: /usr/src/service
+    command: './wait-for-it.sh mysql:3306 -t 30 -- yarn "dev"'
