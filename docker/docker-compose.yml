@@ -1,9 +1,7 @@
 version: '3.7'
 services:
-  mysql:
+  posty_mysql:
     image: mysql:latest
-    cap_add:
-      - SYS_NICE
     hostname: mysql
     ports:
       - '3306:3306'
@@ -25,10 +23,10 @@ services:
     image: node:14.17
     hostname: back
     links:
-      - mysql
+      - posty_mysql
     ports:
       - '3333:3333'
     volumes:
       - ../:/usr/src/service
-    working_dir: /usr/src/service
-    command: './wait-for-it.sh mysql:3306 -t 30 -- yarn "dev"'
+    working_dir: /usr/src/service/
+    command: ['./wait-for-it.sh', 'mysql:3306', '--', 'yarn', 'run', 'dev']

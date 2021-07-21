@@ -4,7 +4,7 @@ import { App } from "./app";
 import { inject, injectable } from "inversify";
 import { IRouter } from "./interfaces/router.interface";
 import { CategoryController } from "./infrastructure/controllers/CategoryController";
-import { createConnection, Connection } from "typeorm";
+import { createConnection, Connection, ConnectionOptions } from "typeorm";
 import { UserController } from "./infrastructure/controllers/UserController";
 import { PostController } from "./infrastructure/controllers/PostController";
 import { CommentController } from "./infrastructure/controllers/CommentController";
@@ -109,7 +109,10 @@ export class Router implements IRouter {
     this.appInstance
       .route("/posts")
       .post(this.authenticationService.userLoggedIn, this.postController.create)
-      .get(this.authenticationService.userLoggedIn, this.postController.postsForm);
+      .get(
+        this.authenticationService.userLoggedIn,
+        this.postController.postsForm
+      );
 
     this.appInstance
       .route("/")
@@ -138,12 +141,30 @@ export class Router implements IRouter {
     // Category routes ---------------
     this.appInstance
       .route("/categories")
-      .get(this.authenticationService.userLoggedIn, this.categoryController.categoryForm)
-      .post(this.authenticationService.userLoggedIn, this.categoryController.create);
+      .get(
+        this.authenticationService.userLoggedIn,
+        this.categoryController.categoryForm
+      )
+      .post(
+        this.authenticationService.userLoggedIn,
+        this.categoryController.create
+      );
   }
   private async initializeDBConnection() {
     // No le paso parámetros porque detecta automáticamente la configuración del archivo ormconfig.json
-    this.DBconnection = await createConnection();
+    // @ts-ignore
+    const databaseConfig = {
+      name: 'default',
+      type: "mysql",
+      host: process.env.MYSQL_HOST || 'mysql',
+      port: process.env.MYSQL_PORT ||'3306',
+      username: process.env.MYSQL_USERNAME,
+      password: process.env.MYSQL_PASSWORD,
+      database: process.env.MYSQL_DATABASE,
+      entities: ["src/domain/Entities/*.ts"],
+    } as ConnectionOptions;
+
+    this.DBconnection = await createConnection(databaseConfig);
     if (this.DBconnection === undefined) {
       throw new Error("Error connecting to database");
     }
