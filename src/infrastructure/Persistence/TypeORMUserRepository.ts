@@ -16,10 +16,10 @@ export class TypeORMUserRepository implements IUserRepository {
   ): Promise<User> {
     return User.findOneOrFail({ username: username }, { relations: relations });
   }
-  public async softDelete(user:User){
+  public async softDelete(user: User) {
     await user.softRemove();
   }
-  public async findById(id:number):Promise<User>{
+  public async findById(id: number): Promise<User> {
     return await User.findOneOrFail(id);
   }
 }

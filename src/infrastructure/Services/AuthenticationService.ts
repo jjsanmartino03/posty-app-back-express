@@ -50,7 +50,7 @@ export class AuthenticationService {
       return done(error);
     }
   };
-  public  serializeUser = (user: User, done: Function)=>{
+  public serializeUser = (req: any, user: any, done: Function)=>{
     done(null, user.id);
   };
   public deserializeUser = async (id: number, done: Function)=>{
@@ -64,7 +64,7 @@ export class AuthenticationService {
   public setup = (appInstance:e.Application) =>{
     passport.use("local-login", new Strategy(this.verifyCallback));
     passport.use("local-signup", new Strategy({passReqToCallback:true}, this.verifyRegistration));
-    passport.serializeUser(this.serializeUser);
+    passport.serializeUser<any, any>(this.serializeUser);
     passport.deserializeUser(this.deserializeUser);
     appInstance.use(passport.initialize());
     appInstance.use(passport.session());

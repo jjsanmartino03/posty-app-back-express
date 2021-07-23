@@ -15,6 +15,7 @@ import { User } from "./domain/Entities/User";
 import { Strategy } from "passport-local";
 import { IUserRepository } from "./domain/Repositories/IUserRepository";
 import TYPES from "./types";
+import { Request, Response } from "express";
 
 @injectable()
 export class Router implements IRouter {
@@ -154,10 +155,10 @@ export class Router implements IRouter {
     // No le paso parámetros porque detecta automáticamente la configuración del archivo ormconfig.json
     // @ts-ignore
     const databaseConfig = {
-      name: 'default',
+      name: "default",
       type: "mysql",
-      host: process.env.MYSQL_HOST || 'mysql',
-      port: process.env.MYSQL_PORT ||'3306',
+      host: process.env.MYSQL_HOST || "mysql",
+      port: process.env.MYSQL_PORT || "3306",
       username: process.env.MYSQL_USERNAME,
       password: process.env.MYSQL_PASSWORD,
       database: process.env.MYSQL_DATABASE,
